@@ -1,17 +1,45 @@
 {
-  "name": "converter",
-  "version": "0.1.0",
-  "private": true,
+  "name": "lrn",
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "start": "next start -p 8000",
-    "server": "node server"
+    "dev": "next dev"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/mime": "^4.0.0",
+    "@types/node": "20.12.7",
+    "@types/react": "18.2.75",
+    "@types/react-beautiful-dnd": "^13.1.2",
+    "@types/react-dom": "18.0.6",
+    "autoprefixer": "^10.4.12",
+    "eslint": "^8.23.1",
+    "eslint-config-next": "12.3.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "postcss": "^8.4.16",
+    "prettier": "^2.7.1",
+    "prettier-plugin-tailwindcss": "^0.1.13",
+    "tailwindcss": "^3.1.8",
+    "ts-node": "^10.9.1",
+    "typescript": "5.4.4"
   },
   "dependencies": {
-    "express": "^4.19.2",
-    "next": "14.1.4",
-    "react": "^18",
-    "react-dom": "^18"
-  }
+    "add": "^2.0.6",
+    "aws-sdk": "^2.1599.0",
+    "date-fns": "^3.6.0",
+    "dotenv": "^16.4.5",
+    "mime": "^4.0.1",
+    "multer": "^1.4.5-lts.1",
+    "next": "^14.1.4",
+    "next-s3-upload": "^0.3.4",
+    "next-sitemap": "^3.1.43",
+    "pdf-img-convert": "^1.2.1",
+    "react": "18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "18.2.0",
+    "yarn": "^1.22.19"
+  },
+  "description": ""
 }
