@@ -3,8 +3,7 @@
 
 import React, { ChangeEvent, useState } from "react";
 export default function FileUploader() {
-    //const [imageUrl, setImageUrl] = useState("/images/test.jpg");
-
+   
     const onImageFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const fileInput = e.target;
 
