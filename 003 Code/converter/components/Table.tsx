@@ -1,16 +1,17 @@
 'use client'
+import { useRouter } from "next/navigation";
 
 
 import React, { ChangeEvent, useState } from "react";
 
 export default function FileConverter(){
-    
+    const router = useRouter();
     return(
         <label
         // className={styles["file-uploader"]}
         style={{ paddingTop: `calc(100% * (${446} / ${720}))` }}
     >
-        <button>TEST</button>
+        <button onClick={() => router.push('/upload')}>Table Extract</button>
     </label>
     )
 }
