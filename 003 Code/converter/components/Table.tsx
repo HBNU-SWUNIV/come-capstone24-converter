@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 import React, { ChangeEvent, useState } from "react";
 
-export default function FileConverter(){
+export default function TableExtract(){
     const router = useRouter();
     return(
         <label
