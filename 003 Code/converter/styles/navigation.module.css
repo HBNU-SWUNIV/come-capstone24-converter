@@ -1,20 +1,25 @@
-.nav {
-    background-color: rgb(145, 165, 149);
-    padding: 50px 100px;
-}
-
-.nav ul {
-    display: flex;
-}
-
 .container {
+    width: 280px;
+    background-color: #000; /* 배경색 검정 */
+    color: #fff; /* 글자색 흰색 */
+    height: 100vh;
+    padding: 20px;
+  }
+  
+  .navLink {
+    color: #fff; /* 링크 텍스트 색상 */
     display: flex;
-    flex-direction: column;
-    align-items: center; /* 가운데 정렬 */
-}
-
-.buttonContainer {
-    display: flex;
-    flex-direction: column; /* 수직으로 정렬 */
-    gap: 100px; /* 버튼들 간격 조절 */
-}
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    padding: 10px 15px;
+  }
+  
+  .navLink:hover {
+    background-color: #333; /* 호버 시 배경색 변경 */
+  }
+  
+  .active {
+    background-color: #065fd4; /* 활성 링크의 배경색 */
+  }
+  
