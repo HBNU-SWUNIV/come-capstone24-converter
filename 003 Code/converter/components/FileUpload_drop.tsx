@@ -39,8 +39,11 @@ export default function FileUploaderDrag() {
             }
 
             const data: { fileUrl: string } = await res.json();
+            const response = await res.json();
+            const {fileUrl} = response;
+            console.log("test!" + fileUrl);
             console.log(data);
-            //setImageUrl(data.fileUrl);
+            
         } catch (error) {
             console.error("Something went wrong, check your console.");
         }

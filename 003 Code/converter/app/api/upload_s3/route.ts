@@ -10,6 +10,10 @@ const s3 = new AWS.S3({
   region: process.env.REGION
 });
 
+const getImageUrl = async (key) => {
+  return `https://${process.env.S3_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com/${key}`;
+};
+
 export const POST = async (req, res) => {
   const formData = await req.formData();
   console.log('test_s3!!!');
@@ -29,8 +33,10 @@ export const POST = async (req, res) => {
       Body: buffer
     };
     await s3.upload(s3Params).promise();
-    const file_url = `https://${process.env.S3_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com/original/1707575568803-file.pdf`;
-    return NextResponse.json({ Message: "Success", status: 201 });
+    const fileurl = `https://${process.env.S3_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com/${s3Params.Key}`;
+   
+    console.log("test + 1: " +  fileurl);
+    return NextResponse.json({fileurl, Message: "Success", status: 201 });
   } catch (error) {
     console.log("Error occurred ", error);
     return NextResponse.json({ Message: "Failed", status: 500 });
