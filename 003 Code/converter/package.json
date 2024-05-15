@@ -28,6 +28,7 @@
   "dependencies": {
     "add": "^2.0.6",
     "aws-sdk": "^2.1599.0",
+    "bootstrap-icons": "^1.11.3",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "mime": "^4.0.1",

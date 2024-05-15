@@ -1,6 +1,6 @@
 'use client'
 
-
+import styles from "../styles/dropbox.module.css";
 import React, { useState } from "react";
 
 export default function FileUploaderDrag() {
@@ -39,36 +39,30 @@ export default function FileUploaderDrag() {
             }
 
             const data: { fileUrl: string } = await res.json();
-            const response = await res.json();
-            const {fileUrl} = response;
-            console.log("test!" + fileUrl);
             console.log(data);
-            
+            //setImageUrl(data.fileUrl);
+
         } catch (error) {
             console.error("Something went wrong, check your console.");
         }
     };
 
     return (
-        <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            style={{
-                border: isDragging ? "2px dashed #000" : "2px dashed #ccc",
-                padding: "20px",
-                textAlign: "center",
-                cursor: "pointer",
-            }}
-        >
-            <p>Drag & Drop your file here</p>
-            <input
-                style={{ display: "none" }}
-                type="file"
-                onChange={(e) => uploadFile(e.target.files[0])}
-            />
+        <div className={styles.dropZone}>
+            <div
+                className={`${styles.dropZoneInner} ${isDragging ? 'isDragging' : ''}`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+            >
+                <p>Drag & Drop your file here</p>
+                <input
+                    style={{ display: "none" }}
+                    type="file"
+                    onChange={(e) => uploadFile(e.target.files[0])}
+                />
+            </div>
         </div>
     );
 }
-
 

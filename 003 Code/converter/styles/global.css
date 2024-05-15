@@ -136,9 +136,10 @@ body {
         'Open Sans', 
         'Helvetica Neue', 
         sans-serif;
-    background-color: rgb(230, 222, 222);
-    color: white;
+    background-color: rgb(252, 252, 252);
+    color: rgb(0, 0, 0);
     font-size: 18px;
+    display: flex;
 }
 
 a {

@@ -1,0 +1,23 @@
+.dropZone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30vh; /* 전체 화면 높이 사용 */
+    width: 90vw; /* 전체 너비 사용 */
+    
+  
+  }
+  
+  .dropZoneInner {
+    border: 2px dashed #000000;
+    padding: 20px;
+    text-align: center;
+    width: 500px; /* 영역의 너비를 50%로 설정 */
+    cursor: pointer;
+    transition: border 0.3s ease;
+    color: rgb(0, 0, 0);
+  }
+  
+  .isDragging {
+    border: 2px dashed #000; /* 드래그 상태일 때 보더 색상 변경 */
+  }
