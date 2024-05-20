@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../../styles/navigation.module.css"
-
+import Send from "../../components/SendtoEmail";
 export default function UploadPage(){
 
 
@@ -10,7 +10,11 @@ export default function UploadPage(){
             <h1>UploadPage</h1>
             <div className={styles.imageview}>
                 <img src={imageurl} alt="Uploaded Image" style={{maxWidth: "100%"}}></img>
+                <div>
+                <Send></Send>
+                </div>
             </div>
+           
         </div>
     )
 }
