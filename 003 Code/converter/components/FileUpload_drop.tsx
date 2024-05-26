@@ -2,9 +2,13 @@
 
 import styles from "../styles/dropbox.module.css";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import exp from "constants";
+
 
 export default function FileUploaderDrag() {
     const [isDragging, setIsDragging] = useState(false);
+    const router = useRouter();
 
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -38,9 +42,13 @@ export default function FileUploaderDrag() {
                 return;
             }
 
-            const data: { fileUrl: string } = await res.json();
-            console.log(data);
-            //setImageUrl(data.fileUrl);
+            const data: { fileurl: string } = await res.json();
+            console.log('hello-2')
+            // console.log(data);
+            console.log(data.fileurl);
+            console.log('hello-3')
+              router.push(`/upload?image_url=${data.fileurl}`);
+
 
         } catch (error) {
             console.error("Something went wrong, check your console.");
@@ -64,5 +72,6 @@ export default function FileUploaderDrag() {
             </div>
         </div>
     );
+   
 }
 

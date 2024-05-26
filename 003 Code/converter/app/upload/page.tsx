@@ -1,10 +1,14 @@
+'use client'
 import React from "react";
 import styles from "../../styles/navigation.module.css"
 import Send from "../../components/SendtoEmail";
+import { useSearchParams } from "next/navigation";
 export default function UploadPage(){
+    const searchParms = useSearchParams();
 
-
-    const imageurl = "https://converter-upload-bucket.s3.ap-northeast-2.amazonaws.com/uploads/11-04-2024/s3_test.png";
+    const imageurl = searchParms.get("image_url");
+    console.log('hello')
+    console.log(imageurl)
     return(
         <div>
             <h1>UploadPage</h1>
