@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import path from "path";
 import AWS from "aws-sdk";
 import dotenv from "dotenv";
-dotenv.config({ path: path.join('/home/lvnvn/test_site', '.env') });
+dotenv.config({ path: path.join('/Users/iyeongho/lvnvn/come-capstone24-converter/003 Code/converter/.env', '.env') });
 // AWS S3 설정
 const s3 = new AWS.S3({
   accessKeyId: process.env.ACCESS_KEY_ID,

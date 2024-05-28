@@ -3,7 +3,7 @@
 import styles from "../styles/dropbox.module.css";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import exp from "constants";
+
 
 
 export default function FileUploaderDrag() {
@@ -43,10 +43,9 @@ export default function FileUploaderDrag() {
             }
 
             const data: { fileurl: string } = await res.json();
-            console.log('hello-2')
-            // console.log(data);
+            
             console.log(data.fileurl);
-            console.log('hello-3')
+            
               router.push(`/upload?image_url=${data.fileurl}`);
 
 

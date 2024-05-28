@@ -23,7 +23,7 @@ export default function FiletoEmail(){
                 console.log(key, value);
               });
             const data = await response.json()
-      
+            console.log(data)
         }catch(error){
             setError(error.message)
             console.error(error)
