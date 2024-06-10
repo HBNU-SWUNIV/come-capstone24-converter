@@ -1,15 +1,7 @@
 import "../styles/global.css";
-import { Metadata } from "next";
 import Navigation from "../components/navigation";
 import React from "react";
 
-export const metadata: Metadata = {
-  title: {
-    template: "%s | Next Movies",
-    default: "Loading...",
-  },
-  description: 'The best movies on the best framework',
-}
 
 export default function Layout({
   children,
@@ -18,10 +10,17 @@ export default function Layout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <title> Converter Web site </title>
+      </head>
       <body>
-      <Navigation />
-      {children}
+        <header>
+          <Navigation />
+        </header>
+        <main>
+          {children}
+        </main>
       </body>
     </html>
-  )
+  );
 }

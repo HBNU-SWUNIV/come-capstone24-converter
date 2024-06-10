@@ -1,152 +1,44 @@
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video {
+/* global.css */
+
+/* 기본 스타일 : 마진, 패딩 제거, 박스 모델 설정 */
+* {
   margin: 0;
   padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
+  box-sizing: border-box;
 }
-/* HTML5 display-role reset for older browsers */
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section {
-  display: block;
-}
+
+/* 전역 폰트 및 배경 설정*/
 body {
-  line-height: 1;
-}
-ol,
-ul {
-  list-style: none;
-}
-blockquote,
-q {
-  quotes: none;
-}
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
-  content: "";
-  content: none;
-}
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f8f8f8; 
+  color: #333; /*기본 텍스트 색상*/
+  line-height: 1.6; /*텍스트 줄 높이*/
+  margin: 0;
+  padding: 0;
 }
 
-body {
-    font-family:
-        system-ui, 
-        -apple-system, 
-        BlinkMacSystemFont, 
-        'Segoe UI', 
-        Roboto, 
-        Oxygen, 
-        Ubuntu, 
-        Cantarell, 
-        'Open Sans', 
-        'Helvetica Neue', 
-        sans-serif;
-    background-color: rgb(252, 252, 252);
-    color: rgb(0, 0, 0);
-    font-size: 18px;
-    display: flex;
+/* 헤더 스타일 */
+header {
+  background-color: #333;
+  color: #f8f3f3;
+  padding: 1%;
+  text-align: center;
+  font-size: 2rem;
 }
 
-a {
-    color:inherit;
-    text-decoration: none;
+/* nav 스타일 */
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 1rem;
 }
 
-a:hover {
-    text-decoration: underline;
+/* 링크 활성화 스타일 */
+nav a.active {
+  border-bottom: 2px solid #fff;
+}
+
+/* 매인 콘텐츠 스타일*/
+main {
+  padding: 5rem;
 }

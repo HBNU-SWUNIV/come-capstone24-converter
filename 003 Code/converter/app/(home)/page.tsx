@@ -13,7 +13,6 @@ export default function HomePage() {
         <div className={styles.container}> 
             <FileUploaderDrag></FileUploaderDrag>
             <div className={button.buttonContainer}> 
-            <TableExtract></TableExtract>
         </div>
     </div>
     );

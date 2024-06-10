@@ -1,26 +1,10 @@
 .nav {
-    background-color: rgb(145, 165, 149);
-    padding: 50px 100px;
+    display: flex;
+    justify-content: space-between;
+    
+
 }
 
-.nav ul {
-    display: flex;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* 가운데 정렬 */
-}
-
-.buttonContainer {
-    display: flex;
-    flex-direction: column; /* 수직으로 정렬 */
-    gap: 100px; /* 버튼들 간격 조절 */
-}
-
-.imageview {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* 가운데 정렬 */
+.link {
+    text-decoration: none;
 }

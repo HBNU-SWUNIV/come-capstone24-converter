@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import path from "path";
 import AWS from "aws-sdk";
 import dotenv from "dotenv";
-dotenv.config({ path: path.join('/home/lvnvn/test_site', '.env') });
+
+dotenv.config({ path: path.join('/Users/berey/capstone/come-capstone24-converter/003 Code/onverter', '.env') });
+
 // AWS S3 설정
 const s3 = new AWS.S3({
   accessKeyId: process.env.ACCESS_KEY_ID,
@@ -10,9 +12,6 @@ const s3 = new AWS.S3({
   region: process.env.REGION
 });
 
-const getImageUrl = async (key) => {
-  return `https://${process.env.S3_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com/${key}`;
-};
 
 export const POST = async (req, res) => {
   const formData = await req.formData();
@@ -35,7 +34,7 @@ export const POST = async (req, res) => {
     await s3.upload(s3Params).promise();
     const fileurl = `https://${process.env.S3_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com/${s3Params.Key}`;
    
-    console.log("test + 1: " +  fileurl);
+    // console.log("test + 1: " +  fileurl);
     return NextResponse.json({fileurl, Message: "Success", status: 201 });
   } catch (error) {
     console.log("Error occurred ", error);

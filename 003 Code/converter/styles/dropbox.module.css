@@ -2,22 +2,36 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 30vh; /* 전체 화면 높이 사용 */
-    width: 90vw; /* 전체 너비 사용 */
+    height: 30vh; /* 전체 화면 높이 30% 사용 */
+    width: 90vw; /* 전체 너비 90% 사용 */
     
   
   }
   
   .dropZoneInner {
     border: 2px dashed #000000;
-    padding: 20px;
+    padding: 40px; /* 여백을 더 추가하여 더 큰 영역 생성 */
     text-align: center;
-    width: 500px; /* 영역의 너비를 50%로 설정 */
+    width: 70%; /* 너비를 70%로 설정하여 더 넓게 */
     cursor: pointer;
-    transition: border 0.3s ease;
+    transition: border 0.3s ease, background-color 0.3s ease, color 0.3s ease;
     color: rgb(0, 0, 0);
+    font-size: 1.5em; /* 텍스트 크기를 키워서 강조 */
+    background-color: #f9f9f9; /* 배경색 추가 */
+    border-radius: 10px; /* 둥근 모서리 추가 */
   }
-  
+
+  .dropZoneInner:hover {
+    background-color: #f0f0f0; /* 호버 시 배경색 변경 */
+  }
+
   .isDragging {
     border: 2px dashed #000; /* 드래그 상태일 때 보더 색상 변경 */
+    background-color: #e0e0e0; /* 드래그 상태일 때 배경색 변경 */
   }
+
+  .dropZoneInner i {
+    font-size: 3em; /* 아이콘 크기 조절 */
+    margin-bottom: 10px; /* 텍스트와 아이콘 사이 여백 추가 */
+    color: #007EE5; /* 드롭박스 아이콘 색상 */
+}

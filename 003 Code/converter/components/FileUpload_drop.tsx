@@ -1,10 +1,17 @@
+// 파일 선택 창 추가
 'use client'
 
 import styles from "../styles/dropbox.module.css";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDropbox } from '@fortawesome/free-brands-svg-icons'
+
 
 export default function FileUploaderDrag() {
     const [isDragging, setIsDragging] = useState(false);
+    const fileInputRef = useRef(null);
+    const router = useRouter();
 
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -23,6 +30,17 @@ export default function FileUploaderDrag() {
         uploadFile(file);
     };
 
+    const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files[0];
+        if (file) {
+            uploadFile(file);
+        }
+    };
+
+    const handleClick = () => {
+        fileInputRef.current.click();
+    };
+
     const uploadFile = async (file: File) => {
         const formData = new FormData();
         formData.append("file", file);
@@ -38,9 +56,11 @@ export default function FileUploaderDrag() {
                 return;
             }
 
-            const data: { fileUrl: string } = await res.json();
-            console.log(data);
-            //setImageUrl(data.fileUrl);
+            const data: { fileurl: string } = await res.json();
+            
+            console.log(data.fileurl);
+            router.push(`/upload?image_url=${data.fileurl}`);
+
 
         } catch (error) {
             console.error("Something went wrong, check your console.");
@@ -54,9 +74,12 @@ export default function FileUploaderDrag() {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
+                onClick={handleClick}
             >
+                <FontAwesomeIcon icon={faDropbox} />
                 <p>Drag & Drop your file here</p>
                 <input
+                    ref={fileInputRef}
                     style={{ display: "none" }}
                     type="file"
                     onChange={(e) => uploadFile(e.target.files[0])}
@@ -64,5 +87,5 @@ export default function FileUploaderDrag() {
             </div>
         </div>
     );
+   
 }
-
