@@ -15,7 +15,8 @@ export default function UploadPage(){
     const [pageNumber, setPageNumber] = useState(1); // 현재 페이지
     const [pageScale, setPageScale] = useState(1); // 페이지 스케일
     const [selectedText, setSelectedText] = useState(''); // 드래그하여 선택된 텍스트
-    const [translatedText, setTranslatedText] = useState(''); // 변환 텍스트
+    const [translatedText, setTranslatedText] = useState(''); // 번역 텍스트
+    const [summarizedText, setSummarizedText] = useState(''); // 요약 텍스트
 
     function onDocumentLoadSuccess({numPages}) {
         console.log(`numPages ${numPages}`);
@@ -58,6 +59,23 @@ export default function UploadPage(){
             setTranslatedText(data.translatedText);
         } catch (error) {
             console.error('Error translating text:', error);
+        }
+    };
+
+    const summarizePaper = async (imageurl) => {
+        try {
+            console.log(imageurl)
+            const response = await fetch("192.168.0.200:2000/summ", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: imageurl }),
+                
+            });
+            const data = await response.json();
+            setSummarizedText(data.summarized);
+            console.log(data.summarized);
+        } catch (error) {
+            console.error('Error summarizing text: ', error)
         }
     };
     
@@ -110,7 +128,18 @@ export default function UploadPage(){
             )}
               <div>
                 <Send></Send>
-            </div>
+              </div>
+              <div>
+                <button onClick={() => {
+                    summarizePaper(imageurl)
+                }}> 요약 </button>
+              </div>
+              {summarizedText && (
+                <div>
+                    <h2>Summarize</h2>
+                    <p>{summarizedText}</p>
+                </div>
+              )}
         </>
     );
 
