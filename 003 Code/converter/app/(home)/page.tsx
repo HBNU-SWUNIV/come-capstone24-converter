@@ -1,5 +1,4 @@
 import React from "react";
-import TableExtract from "../../components/Table";
 import FileUploaderDrag from "../../components/FileUpload_drop";
 import styles from "../../styles/component.module.css";
 import button from "../../styles/button.module.css";
