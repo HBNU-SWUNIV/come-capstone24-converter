@@ -1,16 +1,25 @@
 'use client'
+<<<<<<< HEAD
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+=======
+import React, { useState, useEffect, useCallback } from 'react';
+// import styles from "../../styles/navigation.module.css"
+>>>>>>> 9d0c8bbc333ee0634a825299bfc216a738370d30
 import Send from "../../components/SendtoEmail";
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import { useSearchParams } from "next/navigation";
 import {Document, Page, pdfjs} from 'react-pdf';
 
+<<<<<<< HEAD
 // cdn ver 4.3.136 -> 'https://cdnjs.com/libraries/pdf.js/4.3.136'
 // pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.min.mjs`;
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
+=======
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+>>>>>>> 9d0c8bbc333ee0634a825299bfc216a738370d30
 
 
 export default function UploadPage(){
@@ -65,12 +74,17 @@ export default function UploadPage(){
     };
     
     return (
+<<<<<<< HEAD
         <div style={{ display: 'flex' }}>
+=======
+        <>
+>>>>>>> 9d0c8bbc333ee0634a825299bfc216a738370d30
             {/* pdf 크기가 1280 * 720이 넘는 경우, overflow 처리 */}
             <div style={{width: '1280px', height: '720px', overflow: 'auto'}}>
                 <Document file= {imageurl} onLoadSuccess={onDocumentLoadSuccess}>
                     <Page width={1280} height={720} scale={pageScale} pageNumber={pageNumber}/>
                 </Document>
+<<<<<<< HEAD
             </div>
             <div style={{width: '20%', padding: '1rem'}}>
                 <p>
@@ -116,6 +130,52 @@ export default function UploadPage(){
             </div>
         </div>
         
+=======
+            </div>
+            <div>
+                <p>
+                    Page {pageNumber} of {numPages}
+                </p>
+
+                <p>페이지 이동 버튼</p>
+                <button onClick={() => {
+                    setPageNumber(numPages === pageNumber ? pageNumber : pageNumber + 1)
+                }}> +
+                </button>
+                <button onClick={() => {
+                    setPageNumber(pageNumber === 1 ? pageNumber : pageNumber - 1)
+                }}> -
+                </button>
+
+                <p>페이지 스케일</p>
+                <button onClick={() => {
+                    setPageScale(pageScale === 3 ? 3 : pageScale + 0.1)
+                }}> +
+                </button>
+                <button onClick={() => {
+                    setPageScale((pageScale - 1) < 1 ? 1 : pageScale - 1)
+                }}> -
+                </button>
+            </div>
+            {selectedText && (
+                <div>
+                    <h2>Selected Text</h2>
+                    <p>{selectedText}</p>
+                    {translatedText && (
+                        <>
+                            <h2>Translated Text</h2>
+                            <p>{translatedText}</p>
+                        </>
+                    )}
+                  
+                </div>
+                
+            )}
+              <div>
+                <Send></Send>
+            </div>
+        </>
+>>>>>>> 9d0c8bbc333ee0634a825299bfc216a738370d30
     );
 
 }

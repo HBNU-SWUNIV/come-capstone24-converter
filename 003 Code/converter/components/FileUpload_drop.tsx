@@ -2,15 +2,24 @@
 'use client'
 
 import styles from "../styles/dropbox.module.css";
+<<<<<<< HEAD
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDropbox } from '@fortawesome/free-brands-svg-icons'
+=======
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+
+>>>>>>> 9d0c8bbc333ee0634a825299bfc216a738370d30
 
 
 export default function FileUploaderDrag() {
     const [isDragging, setIsDragging] = useState(false);
+<<<<<<< HEAD
     const fileInputRef = useRef(null);
+=======
+>>>>>>> 9d0c8bbc333ee0634a825299bfc216a738370d30
     const router = useRouter();
 
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -59,7 +68,12 @@ export default function FileUploaderDrag() {
             const data: { fileurl: string } = await res.json();
             
             console.log(data.fileurl);
+<<<<<<< HEAD
             router.push(`/upload?image_url=${data.fileurl}`);
+=======
+            
+              router.push(`/upload?image_url=${data.fileurl}`);
+>>>>>>> 9d0c8bbc333ee0634a825299bfc216a738370d30
 
 
         } catch (error) {
