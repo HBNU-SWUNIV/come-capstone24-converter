@@ -1,12 +1,15 @@
 import PyPDF2
 import nltk
+from urllib.request import urlopen, urlretrieve
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
 
 def summarize(file_path):
     # Read the PDF in binary mode
-    with open(file_path, 'rb') as file:
+    filename = 'temp.pdf'
+    urlretrieve(file_path, filename)
+    with open(filename, 'rb') as file:
         pdf_reader = PyPDF2.PdfReader(file)
         text = ''
 
