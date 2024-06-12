@@ -65,15 +65,24 @@ export default function UploadPage(){
     const summarizePaper = async (imageurl) => {
         try {
             console.log(imageurl)
-            const response = await fetch("192.168.0.200:2000/summ", {
+            const response = await fetch("http://localhost:2000/summ", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url: imageurl }),
-                
             });
+            // .then((response) => response.json())
+            // .then((data) => {
+            //     for (const text of data.summarized) {
+            //         console.log(data)
+            //         setSummarizedText(text)
+            //     }
+            // });
             const data = await response.json();
+            console.log(data.summarized)
+            // const text = Response.json({data});
+            // console.log(text)
             setSummarizedText(data.summarized);
-            console.log(data.summarized);
+            console.log(data);
         } catch (error) {
             console.error('Error summarizing text: ', error)
         }
