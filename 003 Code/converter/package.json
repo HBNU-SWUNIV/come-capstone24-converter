@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev"
+    "fastapi-dev": "python3 -m uvicorn --app-dir ./api index:app --reload",
+    "next-dev": "next dev",
+    "dev": "concurrently \"npm run next-dev\" \"npm run fastapi-dev\"",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "author": "",
   "license": "MIT",
@@ -36,6 +41,7 @@
     "add": "^2.0.6",
     "aws-sdk": "^2.1599.0",
     "bootstrap-icons": "^1.11.3",
+    "concurrently": "^8.2.2",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "mime": "^4.0.1",
