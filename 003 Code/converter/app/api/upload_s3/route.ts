@@ -3,8 +3,8 @@ import path from "path";
 import AWS from "aws-sdk";
 import dotenv from "dotenv";
 
-// dotenv.config({ path: path.join('/Users/berey/capstone/come-capstone24-converter/003 Code/onverter', '.env') });
-dotenv.config({ path: '/home/tylee/caps/.env' });
+dotenv.config({ path: path.join('/Users/berey/2024Capstone/come-capstone24-converter/003 Code/converter', '.env') });
+// dotenv.config({ path: '/home/tylee/caps/.env' });
 // dotenv.config();
 
 // AWS S3 설정

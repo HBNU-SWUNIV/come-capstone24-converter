@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import { TranslateClient, TranslateTextCommand } from '@aws-sdk/client-translate';
 import path from "path";
 import dotenv from "dotenv";
-// dotenv.config({ path: path.join('/Users/berey/capstone/come-capstone24-converter/003 Code/converter', '.env') });
+dotenv.config({ path: path.join('/Users/berey/2024Capstone/come-capstone24-converter/003 Code/converter', '.env') });
 // dotenv.config();
-dotenv.config({ path: '/home/tylee/caps/.env' });
+//dotenv.config({ path: '/home/tylee/caps/.env' });
 
 const translate = new TranslateClient({
     region: process.env.AWS_REGION,

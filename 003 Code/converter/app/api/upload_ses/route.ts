@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import path from "path";
 import dotenv from "dotenv";
 import { SendEmailCommand, SESClient } from '@aws-sdk/client-ses';
-// dotenv.config({ path: path.join('/Users/berey/capstone/come-capstone24-converter/003 Code/onverter', '.env') });
+
+dotenv.config({ path: path.join('/Users/berey/2024Capstone/come-capstone24-converter/003 Code/converter', '.env') });
 
 // dotenv.config({ path: path.join('/Users/iyeongho/lvnvn/come-capstone24-converter/003 Code/converter/.env', '.env') });
 
 // dotenv.config({ path: '../../../.env' });
-dotenv.config();
+//cotenv.config();
 
 // AWS SES 설정
 const sesClient = new SESClient({
