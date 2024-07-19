@@ -1,31 +1,29 @@
 'use client'
-import React, { useState, useEffect, useCallback } from 'react';
-// import styles from "../../styles/navigation.module.css"
-import Send from "../../components/SendtoEmail";
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from "next/navigation";
+import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
-import { useSearchParams } from "next/navigation";
-import {Document, Page, pdfjs} from 'react-pdf';
+// import axios from 'axios';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-
-export default function UploadPage(){
-    const [numPages, setNumPages] = useState(null); // 총 페이지수
-    const [pageNumber, setPageNumber] = useState(1); // 현재 페이지
-    const [pageScale, setPageScale] = useState(1); // 페이지 스케일
-    const [selectedText, setSelectedText] = useState(''); // 드래그하여 선택된 텍스트
-    const [translatedText, setTranslatedText] = useState(''); // 번역 텍스트
-    const [summarizedText, setSummarizedText] = useState(''); // 요약 텍스트
-
-    function onDocumentLoadSuccess({numPages}) {
-        console.log(`numPages ${numPages}`);
-        setNumPages(numPages);
-    }
+export default function UploadPage() {
+    const [numPages, setNumPages] = useState(null);
+    const [pageScale, setPageScale] = useState(2.0); // 기본 스케일 값을 2.0로 설정하여 기본 크기를 증가시킵니다.
+    const [selectedText, setSelectedText] = useState('');
+    const [translatedText, setTranslatedText] = useState('');
+    const [summarizedText, setSummarizedText] = useState('');
+    const [question, setQuestion] = useState('');
+    const [answer, setAnswer] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const searchParms = useSearchParams();
-
     const imageurl = searchParms.get("image_url");
+
+    function onDocumentLoadSuccess({ numPages }) {
+        setNumPages(numPages);
+    }
 
     const handleMouseUp = () => {
         const selection = window.getSelection();
@@ -36,7 +34,7 @@ export default function UploadPage(){
         }
     };
 
-    useEffect(() => {  // React가 렌더링 될 때마다 실행되기에 동적 작업에 적합
+    useEffect(() => {
         const textLayer = document.querySelector('.react-pdf__Page__textContent');
         if (textLayer) {
             textLayer.addEventListener('mouseup', handleMouseUp);
@@ -46,7 +44,7 @@ export default function UploadPage(){
                 textLayer.removeEventListener('mouseup', handleMouseUp);
             }
         };
-    }, [handleMouseUp, pageNumber]);
+    }, [handleMouseUp]);
 
     const translateText = async (text) => {
         try {
@@ -64,92 +62,72 @@ export default function UploadPage(){
 
     const summarizePaper = async (imageurl) => {
         try {
-            console.log(imageurl)
             const response = await fetch("http://localhost:2000/summ", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url: imageurl }),
             });
-            // .then((response) => response.json())
-            // .then((data) => {
-            //     for (const text of data.summarized) {
-            //         console.log(data)
-            //         setSummarizedText(text)
-            //     }
-            // });
             const data = await response.json();
-            console.log(data.summarized)
-            // const text = Response.json({data});
-            // console.log(text)
             setSummarizedText(data.summarized);
-            console.log(data);
         } catch (error) {
             console.error('Error summarizing text: ', error)
         }
     };
-    
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setAnswer('');
+
+        // axios.post('/api/ollama', { question })
+        //     .then((response) => {
+        //         setAnswer(response.data.answer);
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error fetching answer:', error);
+        //         setAnswer('Error fetching answer.');
+        //     })
+        //     .finally(() => {
+        //         setLoading(false);
+        //     });
+    };
+
     return (
-        <>
-            {/* pdf 크기가 1280 * 720이 넘는 경우, overflow 처리 */}
-            <div style={{width: '1280px', height: '720px', overflow: 'auto'}}>
-                <Document file= {imageurl} onLoadSuccess={onDocumentLoadSuccess}>
-                    <Page width={1280} height={720} scale={pageScale} pageNumber={pageNumber}/>
+        <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+            <div style={{ width: '50%', overflowY: 'auto', borderRight: '1px solid #ccc', padding: '10px' }}>
+                <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+                    <button onClick={() => setPageScale(pageScale >= 3 ? 3 : pageScale + 0.1)}>
+                        Zoom In
+                    </button>
+                    <button onClick={() => setPageScale(pageScale <= 1 ? 1 : pageScale - 0.1)}>
+                        Zoom Out
+                    </button>
+                </div>
+                <Document file={imageurl} onLoadSuccess={onDocumentLoadSuccess}>
+                    {Array.from(new Array(numPages), (el, index) => (
+                        <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={pageScale} />
+                    ))}
                 </Document>
             </div>
-            <div>
-                <p>
-                    Page {pageNumber} of {numPages}
-                </p>
-
-                <p>페이지 이동 버튼</p>
-                <button onClick={() => {
-                    setPageNumber(numPages === pageNumber ? pageNumber : pageNumber + 1)
-                }}> +
-                </button>
-                <button onClick={() => {
-                    setPageNumber(pageNumber === 1 ? pageNumber : pageNumber - 1)
-                }}> -
-                </button>
-
-                <p>페이지 스케일</p>
-                <button onClick={() => {
-                    setPageScale(pageScale === 3 ? 3 : pageScale + 0.1)
-                }}> +
-                </button>
-                <button onClick={() => {
-                    setPageScale((pageScale - 1) < 1 ? 1 : pageScale - 1)
-                }}> -
-                </button>
+            <div style={{ width: '50%', display: 'flex', flexDirection: 'column', padding: '10px', overflow: 'hidden' }}>
+                <div style={{ flex: 1, overflowY: 'auto', marginBottom: '10px' }}>
+                    <h2>Q&A</h2>
+                    {loading && <p>Loading...</p>}
+                    {answer && <p>Answer: {answer}</p>}
+                </div>
+                <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center', padding: '10px', borderTop: '1px solid #ccc' }}>
+                    <input
+                        type="text"
+                        value={question}
+                        onChange={(e) => setQuestion(e.target.value)}
+                        placeholder="Enter your question"
+                        style={{ flex: 1, padding: '10px', marginRight: '10px' }}
+                    />
+                    <button type="submit" style={{ padding: '10px' }}>
+                        Ask
+                    </button>
+                </form>
             </div>
-            {selectedText && (
-                <div>
-                    <h2>Selected Text</h2>
-                    <p>{selectedText}</p>
-                    {translatedText && (
-                        <>
-                            <h2>Translated Text</h2>
-                            <p>{translatedText}</p>
-                        </>
-                    )}
-                  
-                </div>
-                
-            )}
-              <div>
-                <Send></Send>
-              </div>
-              <div>
-                <button onClick={() => {
-                    summarizePaper(imageurl)
-                }}> 요약 </button>
-              </div>
-              {summarizedText && (
-                <div>
-                    <h2>Summarize</h2>
-                    <p>{summarizedText}</p>
-                </div>
-              )}
-        </>
+        </div>
     );
-
 }
