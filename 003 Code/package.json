@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "mongodb": "^6.5.0",
-    "pdf-img-convert": "^1.2.1",
-    "stream": "^0.0.2"
-  }
-}
