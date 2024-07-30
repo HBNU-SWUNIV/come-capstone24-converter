@@ -1,0 +1,12 @@
+curl -fsSL https://ollama.com/install.sh | sh
+ 2012  ollama list
+ 2013  ollama create llama3-Bllossom -f Modelfile
+ 2014  ollama create llama3-Bllossom -f Modelfile.md
+ 2015  ollama list
+ 2016  ollama run llama3-Bllossom:latest
+ 2017  ollama create llama3-Bllossom -f Modelfile.md
+ 2018  ollama run llama3-Bllossom:latest
+ 2019  ollama create llama3-Bllossom -f Modelfile.md
+ 2020  ollama run llama3-Bllossom:latest
+ 2021  ollama create llama3-Bllossom -f Modelfile.md
+ 2022  ollama run llama3-Bllossom:latest
