@@ -45,3 +45,19 @@
   .btn-16:active {
     top: 2px;
   }
+
+  .buttonGroup {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+.navigationButtons, .scaleButtons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+.button {
+    margin: 5px;
+  }

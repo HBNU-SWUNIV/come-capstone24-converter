@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev"
+    "dev": "concurrently \"next dev\" \"003 Code/converter/run_flask.sh\""
   },
   "author": "",
   "license": "MIT",
@@ -36,6 +36,7 @@
     "add": "^2.0.6",
     "aws-sdk": "^2.1599.0",
     "bootstrap-icons": "^1.11.3",
+    "concurrently": "^8.2.2",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "mime": "^4.0.1",
