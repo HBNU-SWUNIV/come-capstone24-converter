@@ -47,7 +47,7 @@ export default function UploadPage() {
 
     const translateText = async (text) => { // 번역 기능 
         try {
-            const response = await fetch('/api/translate', { // /api/translate 경로에 요청
+            const response = await fetch('http://127.0.0.1:2000/translate/translateText', { // /api/translate 경로에 요청
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ text }),
@@ -59,19 +59,6 @@ export default function UploadPage() {
         }
     };
 
-    const summarizePaper = async (imageurl) => { // 요약 기능 
-        try {
-            const response = await fetch("http://localhost:2000/summ", { // python 서버의 2000 포트의 summ 경로에 요청
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url: imageurl }),
-            });
-            const data = await response.json(); // json 형태로 요청에 대한 응답 받기
-            setSummarizedText(data.summarized); // 해당 응답의 summarized 부분을 쿼리해서 현재 요약된 텍스트로 설정 
-        } catch (error) { // 에러 처리
-            console.error('Error summarizing text: ', error)
-        }
-    };
 
     const handleSubmit = async (e) => { // 사용자가 입력한 내용을 제출
         e.preventDefault();  // 브라우저의 기본 동작을 막음
