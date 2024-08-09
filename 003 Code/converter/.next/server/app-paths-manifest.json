@@ -1,0 +1,6 @@
+{
+  "/(home)/page": "app/(home)/page.js",
+  "/api/upload_s3/route": "app/api/upload_s3/route.js",
+  "/api/translate/route": "app/api/translate/route.js",
+  "/upload/page": "app/upload/page.js"
+}

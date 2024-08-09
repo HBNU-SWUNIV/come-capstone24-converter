@@ -1,0 +1,62 @@
+/*!************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[3]!./styles/navigation.module.css ***!
+  \************************************************************************************************************************************************************************************************************************************************************************/
+.navigation_nav___kX_6 {
+    display: flex;
+    justify-content: space-between;
+    
+
+}
+
+.navigation_link__DP_u1 {
+    text-decoration: none;
+}
+
+/*!***************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[12].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[12].use[3]!./styles/global.css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************/
+/* global.css */
+
+/* 기본 스타일 : 마진, 패딩 제거, 박스 모델 설정 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 전역 폰트 및 배경 설정*/
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f8f8; 
+  color: #333; /*기본 텍스트 색상*/
+  line-height: 1.6; /*텍스트 줄 높이*/
+  margin: 0;
+  padding: 0;
+}
+
+/* 헤더 스타일 */
+header {
+  background-color: #333;
+  color: #f8f3f3;
+  padding: 1%;
+  text-align: center;
+  font-size: 2rem;
+}
+
+/* nav 스타일 */
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 1rem;
+}
+
+/* 링크 활성화 스타일 */
+nav a.active {
+  border-bottom: 2px solid #fff;
+}
+
+/* 매인 콘텐츠 스타일*/
+main {
+  padding: 5rem;
+}
+

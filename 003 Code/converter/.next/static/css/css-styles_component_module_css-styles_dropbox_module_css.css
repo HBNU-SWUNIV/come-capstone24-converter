@@ -1,0 +1,90 @@
+/*!*********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[3]!./styles/dropbox.module.css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************/
+.dropbox_dropZone___JKFN {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30vh; /* 전체 화면 높이 30% 사용 */
+    width: 90vw; /* 전체 너비 90% 사용 */
+    
+  
+  }
+  
+  .dropbox_dropZoneInner__k3fSH {
+    border: 2px dashed #000000;
+    padding: 40px; /* 여백을 더 추가하여 더 큰 영역 생성 */
+    text-align: center;
+    width: 70%; /* 너비를 70%로 설정하여 더 넓게 */
+    cursor: pointer;
+    transition: border 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    color: rgb(0, 0, 0);
+    font-size: 1.5em; /* 텍스트 크기를 키워서 강조 */
+    background-color: #f9f9f9; /* 배경색 추가 */
+    border-radius: 10px; /* 둥근 모서리 추가 */
+  }
+
+  .dropbox_dropZoneInner__k3fSH:hover {
+    background-color: #f0f0f0; /* 호버 시 배경색 변경 */
+  }
+
+  .dropbox_isDragging__dxXww {
+    border: 2px dashed #000; /* 드래그 상태일 때 보더 색상 변경 */
+    background-color: #e0e0e0; /* 드래그 상태일 때 배경색 변경 */
+  }
+
+  .dropbox_dropZoneInner__k3fSH i {
+    font-size: 3em; /* 아이콘 크기 조절 */
+    margin-bottom: 10px; /* 텍스트와 아이콘 사이 여백 추가 */
+    color: #007EE5; /* 드롭박스 아이콘 색상 */
+}
+/*!***********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[3]!./styles/component.module.css ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************/
+.component_container__bhznZ {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 가운데 정렬 */
+    
+  }
+  
+  .component_buttonContainer__oKBz1 {
+  
+    align-items: center;
+    flex-direction: column; /* 수직으로 정렬 */
+    /* 버튼들 간격 조절 */
+  }
+
+  /* 16 */
+.component_btn-16__JQcHW {
+    border: none;
+    color: #000;
+  }
+  .component_btn-16__JQcHW:after {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 100%;
+    top: 0;
+    left: 0;
+    direction: rtl;
+    z-index: -1;
+    box-shadow:
+     -7px -7px 20px 0px #fff9,
+     -4px -4px 5px 0px #fff9,
+     7px 7px 20px 0px #0002,
+     4px 4px 5px 0px #0001;
+    transition: all 0.3s ease;
+  }
+  .component_btn-16__JQcHW:hover {
+    color: #000;
+  }
+  .component_btn-16__JQcHW:hover:after {
+    left: auto;
+    right: 0;
+    width: 100%;
+  }
+  .component_btn-16__JQcHW:active {
+    top: 2px;
+  }
+  

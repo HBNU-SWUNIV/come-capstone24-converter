@@ -1,0 +1,22 @@
+{
+  "pages": {
+    "/(home)/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-styles_component_module_css-styles_dropbox_module_css.css",
+      "static/chunks/app/(home)/page.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-styles_global_css-styles_navigation_module_css.css",
+      "static/chunks/app/layout.js"
+    ],
+    "/upload/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-node_modules_react-pdf_dist_esm_Page_AnnotationLayer_css-node_modules_react-pdf_dist_esm_-6e4f53.css",
+      "static/chunks/app/upload/page.js"
+    ]
+  }
+}

@@ -8,7 +8,7 @@ class Question(BaseModel):
     question: str
 
 # LLaMA 모델 로드
-model_name = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
+model_name = "MLP-KTLim/llama-3-Korean-Bllossom-8B-Q4_K_M.gguf"
 qa_pipeline = pipeline("question-answering", model=model_name, tokenizer=model_name)
 
 @llamaR.post("/ask")
