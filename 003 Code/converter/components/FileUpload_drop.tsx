@@ -45,22 +45,22 @@ export default function FileUploaderDrag() {
         const formData = new FormData();
         formData.append("file", file);
 
-        try {
-            const res = await fetch("/api/upload_s3/", {
+        try {   
+            const res = await fetch("http://127.0.0.1:2000/s3r/upload", {
                 method: "POST",
                 body: formData,
             });
 
-            if (!res.ok) {
+            if (!res.ok) {  
                 console.error("Something went wrong, check your console.");
                 return;
             }
 
-            const data: { fileurl: string } = await res.json();
+            const data: { url: string } = await res.json();
             
-            console.log(data.fileurl);
+            console.log("Received URL:", data.url); // URL이 정상적으로 받아졌는지 확인
             
-              router.push(`/upload?image_url=${data.fileurl}`);
+              router.push(`/upload?image_url=${data.url}`);
 
 
         } catch (error) {
