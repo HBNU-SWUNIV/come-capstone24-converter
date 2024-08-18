@@ -8,6 +8,8 @@ from pydantic import BaseModel
 
 from app.api.upload_file.s3 import s3r
 from app.api.translate_text.translate import translate
+from app.api.qna_bot.QnAbot import qna
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,6 +33,7 @@ converter.add_middleware(
 
 converter.include_router(s3r)
 converter.include_router(translate)
+converter.include_router(qna)
 
 class summItem(BaseModel):
     url: str
@@ -38,4 +41,4 @@ class summItem(BaseModel):
 
 
 if __name__ == "__main__":
-    uvicorn.run(converter, host="0", port=2000)
+    uvicorn.run(converter, host="0.0.0.0", port=2000)

@@ -7,9 +7,9 @@ from botocore.exceptions import BotoCoreError, ClientError
 
 load_dotenv()
 
-translate= APIRouter(prefix='/translate')
+translate= APIRouter(prefix='/translate') 
 
-translate_client = client(
+translate_client = client( 
     "translate",
     aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
     aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),

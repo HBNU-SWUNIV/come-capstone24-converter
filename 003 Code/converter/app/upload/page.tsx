@@ -65,18 +65,25 @@ export default function UploadPage() {
         setLoading(true); // 로딩 활성화 
         
         try {
-            const reponse = await fetch('http://127.0.0.1:8000/llama/ask', {
+            const reponse = await fetch('http://127.0.0.1:2000/QnAbot/qna', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({question})
+                body: JSON.stringify({ text: question })
             });
+
+            if (!reponse.ok) {
+                throw new Error('Network response was not ok');
+            }
+            
             const data = await reponse.json();
             setAnswer(data.answer)
-            //setAnswer('hello')
+            
         } catch(error) {
             console.error('Error fetching the answer:', error)
+        } finally {
+            setLoading(false); // 로딩 상태를 비활성화
         }
         
      };
@@ -100,10 +107,17 @@ export default function UploadPage() {
             </div>
             <div style={{ width: '50%', display: 'flex', flexDirection: 'column', padding: '10px', overflow: 'hidden' }}>
                 <div style={{ flex: 1, overflowY: 'auto', marginBottom: '10px' }}>
-                    <h2>Q&A</h2>
+                <h2>Q&A</h2>
                     {loading && <p>Loading...</p>}
                     {translatedText && <p>Translated: {translatedText}</p>} {/* 번역된 텍스트 표시 */}
-                    {answer && <p>Answer: {answer}</p>}
+                    {answer && (
+                    <div>
+                        <h3>Question:</h3>
+                        <p>{question}</p> {/* 사용자가 입력한 질문 표시 */}
+                        <h3>Answer:</h3>
+                        <p>{answer}</p> {/* 서버로부터 받은 응답 표시 */}
+                    </div>
+                         )}
                 </div>
                 <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center', padding: '10px', borderTop: '1px solid #ccc' }}>
                     <input
