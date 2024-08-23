@@ -9,7 +9,8 @@ from pydantic import BaseModel
 from app.api.upload_file.s3 import s3r
 from app.api.translate_text.translate import translate
 from app.api.qna_bot.QnAbot import qna
-
+from app.api.local_load.local_server import localModel
+from app.api.local_bot.local_qna import localQna
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -34,7 +35,8 @@ converter.add_middleware(
 converter.include_router(s3r)
 converter.include_router(translate)
 converter.include_router(qna)
-
+converter.include_router(localModel)
+converter.include_router(localQna)
 class summItem(BaseModel):
     url: str
 
