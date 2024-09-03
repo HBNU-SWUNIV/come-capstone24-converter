@@ -1,4 +1,4 @@
-// File: /Users/iyeongho/lvnvn/capstone_2024/come-capstone24-converter/003 Code/converter/app/layout.tsx
+// File: /Users/iyeongho/lvnvn/test/come-capstone24-converter/003 Code/converter/app/layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

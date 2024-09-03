@@ -11,20 +11,20 @@ export default function UploadPage() {
     const [numPages, setNumPages] = useState(null); // 현재 페이지 수
     const [pageScale, setPageScale] = useState(2.0); // 페이지 크기 
     const [selectedText, setSelectedText] = useState(''); // 사용자가 드래그로 선택한 텍스트
-    const [translatedText, setTranslatedText] = useState(''); // 번역
+    const [translatedText, setTranslatedText] = useState(''); // 번역된 텍스트
     const [question, setQuestion] = useState(''); // 질의
     const [answer, setAnswer] = useState(''); // 응답
-    const [loading, setLoading] = useState(false); // 기능 로딩 
+    const [loading, setLoading] = useState(false); // 기능 로딩 상태
     const [qaHistory, setQaHistory] = useState([]); // 질의응답 기록 
 
-    const searchParms = useSearchParams();   // 전 페이지인 home 페이지에서 업로드한 pdf의 저장 url 가져오기
+    const searchParms = useSearchParams();   // 이전 페이지에서 전달된 PDF 파일의 URL 가져오기
     const imageurl = searchParms.get("image_url");
 
     function onDocumentLoadSuccess({ numPages }) {
         setNumPages(numPages);
     }
 
-    const handleMouseUp = () => {  // 사용자가 마우스를 놓은 기점으로 선택된 텍스트들을 번역 api에 post 
+    const handleMouseUp = () => {  // 사용자가 마우스를 놓은 시점에 선택된 텍스트를 번역 API에 전송
         const selection = window.getSelection();
         const selectedText = selection.toString();
         if (selectedText.length > 0) {
@@ -33,7 +33,7 @@ export default function UploadPage() {
         }
     };
 
-    useEffect(() => { // 사용자가 PDF 뷰어에 주는 드래그 이벤트를 감시 및 반응
+    useEffect(() => { // 사용자가 PDF 뷰어에서 드래그 이벤트를 감시
         const textLayer = document.querySelector('.react-pdf__Page__textContent');
         if (textLayer) {
             textLayer.addEventListener('mouseup', handleMouseUp);
@@ -45,9 +45,9 @@ export default function UploadPage() {
         };
     }, [handleMouseUp]);
 
-    const translateText = async (text) => { // 번역 
+    const translateText = async (text) => { // 텍스트 번역 요청
         try {
-            const response = await fetch('http://127.0.0.1:2000/translate/translateText', { // 번역 api route 
+            const response = await fetch('http://127.0.0.1:2000/translate/translateText', { // 번역 API 경로
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ text }),
@@ -59,12 +59,12 @@ export default function UploadPage() {
         }
     };
 
-    const handleSubmit = async (e) => { // 사용자가 질의를 제출하였을 때 local_qna route로 해당 내용 전송
+    const handleSubmit = async (e) => { // 사용자가 질문을 제출하면 해당 질문을 처리하는 로직
         e.preventDefault();
         setLoading(true);
 
         try {
-            const response = await fetch('http://127.0.0.1:2000/localQna/sendQes', { // local_qna route -> 해당 기능은 local_server route로 전송함 
+            const response = await fetch('http://127.0.0.1:2000/localQna/sendQes', { // Q&A 처리 API 경로
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export default function UploadPage() {
             setAnswer(data.answer);
 
             // Q&A 기록을 업데이트
-            setQaHistory((prevHistory) => [...prevHistory, { question, answer: data.answer }]); // 질의 응답 기록 저장 
+            setQaHistory((prevHistory) => [...prevHistory, { question, answer: data.answer }]);
             
         } catch (error) {
             console.error('Error fetching the answer:', error)
@@ -93,7 +93,7 @@ export default function UploadPage() {
     return (
         <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
             <div style={{ width: '50%', overflowY: 'auto', borderRight: '1px solid #ccc', padding: '10px' }}>
-                <div style={{ textAlign: 'center', marginBottom: '10px' }}> {/* 페이지 이동 및 크기 조절 */}
+                <div style={{ textAlign: 'center', marginBottom: '10px' }}> {/* 페이지 크기 조절 */}
                     <button onClick={() => setPageScale(pageScale >= 3 ? 3 : pageScale + 0.1)}>  
                         Zoom In
                     </button>
@@ -101,7 +101,7 @@ export default function UploadPage() {
                         Zoom Out
                     </button>
                 </div>
-                <Document file={imageurl} onLoadSuccess={onDocumentLoadSuccess}>  {/* pdf 뷰어 */}
+                <Document file={imageurl} onLoadSuccess={onDocumentLoadSuccess}>  {/* PDF 뷰어 */}
                     {Array.from(new Array(numPages), (el, index) => (
                         <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={pageScale} />
                     ))}
@@ -125,9 +125,9 @@ export default function UploadPage() {
                             </div>
                         </div>
                     ))}
-                </div> {/* QnA */}
+                </div> {/* Q&A 표시 */}
                 <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center', padding: '10px', borderTop: '1px solid #ccc' }}> 
-                    {/* 질의 입력 폼 */}
+                    {/* 질문 입력 폼 */}
                     <input 
                         type="text"
                         value={question}
@@ -135,10 +135,15 @@ export default function UploadPage() {
                         placeholder="Enter your question"
                         style={{ flex: 1, padding: '10px', marginRight: '10px' }}
                     /> 
-                    <button type="submit" style={{ padding: '10px' }}> {/* 질의 제출 */}
+                    <button type="submit" style={{ padding: '10px' }}> {/* 질문 제출 */}
                         Ask
                     </button>
                 </form>
+                <div>
+                    {/* 번역된 텍스트 표시 */}
+                    <h3>Translated Text:</h3>
+                    <p>{translatedText}</p>
+                </div>
             </div>
         </div>
     );
