@@ -304,9 +304,19 @@ dmypy.json
 llama-3-Korean-Bllossom-8B-Q4_K_M.gguf
 
 capstone_python/share/jupyter/
-
-.next/
-
 capstone_python/bin/
 capstone_python/etc/
 capstone_python/share/
+
+.next/
+.next/cache/
+.next/server/
+.next/static/
+.next/types/
+.next/app-build-manifest.json
+.next/build-manifest.json
+.next/react-loadable-manifest.json
+.next/trace
+
+
+
