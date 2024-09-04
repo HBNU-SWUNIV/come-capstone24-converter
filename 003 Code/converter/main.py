@@ -9,13 +9,41 @@ from pydantic import BaseModel
 from app.api.upload_file.s3 import s3r
 from app.api.translate_text.translate import translate
 from app.api.qna_bot.QnAbot import qna
-from app.api.local_load.local_server import localModel
+from app.local_load.model_loader import load_llm_model, load_embedding_model
 from app.api.local_bot.local_qna import localQna
+from contextlib import asynccontextmanager
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-converter = FastAPI()
+
+# LLM 및 임베딩 모델을 저장할 전역 변수
+llm_model = None
+embedding_model = None
+
+ 
+
+def start():
+    global llm_model, embedding_model
+    llm_model = load_llm_model()
+    embedding_model = load_embedding_model()
+    logger.info("Models loaded successfully")
+
+def shutdown():
+    logger.info("Shutting down models")   
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # When service starts.
+    start()
+    
+    yield
+    
+    # When service is stopped.
+    shutdown()
+
+
+converter = FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost.tiangolo.com",
@@ -34,9 +62,8 @@ converter.add_middleware(
 
 converter.include_router(s3r)
 converter.include_router(translate)
-converter.include_router(qna)
-converter.include_router(localModel)
 converter.include_router(localQna)
+
 class summItem(BaseModel):
     url: str
 

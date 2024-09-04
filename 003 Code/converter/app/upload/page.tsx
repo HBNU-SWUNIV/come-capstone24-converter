@@ -16,6 +16,8 @@ export default function UploadPage() {
     const [answer, setAnswer] = useState(''); // 응답
     const [loading, setLoading] = useState(false); // 기능 로딩 상태
     const [qaHistory, setQaHistory] = useState([]); // 질의응답 기록 
+    const [requestType, setRequestType] = useState('Page Summary');
+
 
     const searchParms = useSearchParams();   // 이전 페이지에서 전달된 PDF 파일의 URL 가져오기
     const imageurl = searchParms.get("image_url");
@@ -64,12 +66,15 @@ export default function UploadPage() {
         setLoading(true);
 
         try {
-            const response = await fetch('http://127.0.0.1:2000/localQna/sendQes', { // Q&A 처리 API 경로
+            const response = await fetch('http://127.0.0.1:2000/localQna/answer', { // Q&A 처리 API 경로
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ text: question })
+                body: JSON.stringify({ 
+                    text: question,
+                    pdf: imageurl,
+                })
             });
 
             if (!response.ok) {
@@ -89,6 +94,8 @@ export default function UploadPage() {
             setQuestion('');  // 입력 필드 초기화
         }
     };
+
+
 
     return (
         <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
