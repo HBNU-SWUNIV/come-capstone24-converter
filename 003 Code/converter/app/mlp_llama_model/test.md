@@ -4,7 +4,7 @@
  - npm install
  - venv 가상환경 접속 
  - pip install -r requirements.txt
- - python download_llama.py
+
 
 ## 서버 실행
  - npm run dev (Client)

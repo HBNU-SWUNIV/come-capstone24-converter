@@ -35,3 +35,18 @@
     margin-bottom: 10px; /* 텍스트와 아이콘 사이 여백 추가 */
     color: #007EE5; /* 드롭박스 아이콘 색상 */
 }
+
+.iconWrapper {
+  margin-bottom: 10px; /* Space between icon and text */
+  color: #000000; /* Icon color */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.loadingWrapper {
+  display: flex;
+  padding: 20px;
+  margin: 20px;
+}

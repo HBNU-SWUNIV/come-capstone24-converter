@@ -1,4 +1,7 @@
 /* global.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* 기본 스타일 : 마진, 패딩 제거, 박스 모델 설정 */
 * {
