@@ -33,6 +33,12 @@
 ## Case Study
   - ### Description
   
+
+## System Architecture
+
+<img width="566" alt="image" src="https://github.com/user-attachments/assets/f809ffc0-9de0-4ec3-aa70-d2754ac1dd29">
+
+
   
 ## Conclusion - ChatGPT 와의 성능 비교
    <img width="997" alt="image" src="https://github.com/user-attachments/assets/43adee51-66a9-4ccd-9ff5-d011e56fae9c">
