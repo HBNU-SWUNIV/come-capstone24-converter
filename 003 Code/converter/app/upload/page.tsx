@@ -1,56 +1,19 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from "next/navigation";
-import { FC } from "react";
+//import { FC } from "react";
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import { Send, ZoomIn, ZoomOut, ChevronUp, ChevronDown } from "lucide-react";
 import {useTypewriter, Cursor} from "react-simple-typewriter";
-import { IconDots } from "@tabler/icons-react";
+//import { IconDots } from "@tabler/icons-react";
+
+import Modal from '../../components/Modal';
+import ChatLoader from '../../components/ChatLoader';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-// Modal 컴포넌트 정의
-const Modal = ({ isOpen, onClose, translatedText }) => {
-  if (!isOpen) return null;
-
-  console.log("Modal Opened"); // 모달이 열릴 때 로그 출력
-
-  
-  return (
-      <div style={{
-          position: 'fixed', 
-          top: '50%', 
-          left: '50%', 
-          transform: 'translate(-50%, -50%)',
-          backgroundColor: '#fff', 
-          padding: '20px', 
-          zIndex: 1000, 
-          borderRadius: '10px', 
-          border: '1px solid #333',  // 테두리 생성
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'  // 그림자 추가
-      }}>
-          <h2>번역 결과</h2>
-          <p>{translatedText}</p>
-          <button onClick={onClose} style={{ marginTop: '20px', padding: '10px', backgroundColor: '#333', color: '#fff', borderRadius: '8px' }}>닫기</button>
-      </div>
-  );
-};
-
-// 챗 로더
-export const ChatLoader: FC = () => {
-    return (
-      <div className="flex flex-col flex-start">
-        <div
-          className={`flex items-center bg-neutral-200 text-neutral-900 rounded-2xl px-4 py-2 w-fit`}
-          style={{ overflowWrap: "anywhere" }}
-        >
-          <IconDots className="animate-pulse" />
-        </div>
-      </div>
-    );
-  };
 
 export default function UploadPage() {
     const [totalPages, setTotalPages] = useState(0) //총 페이지 수
@@ -63,6 +26,8 @@ export default function UploadPage() {
     const [loading, setLoading] = useState(false); // 기능 로딩 상태
     const [qaHistory, setQaHistory] = useState([]); // 질의응답 기록 
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal 창 열림 상태
+    const scroll = useRef(null); // PDF 뷰어 영역에 대한 참조
+    const [scrollEventBlocked, setScrollEventBlocked] = useState(false);
 
 
     const searchParams = useSearchParams();   // 이전 페이지에서 전달된 PDF 파일의 URL 가져오기
@@ -91,7 +56,7 @@ export default function UploadPage() {
 
     useEffect(() => { // 사용자가 PDF 뷰어에서 드래그 이벤트를 감시
         const textLayer = document.querySelector('.react-pdf__Page__textContent');
-        console.log("텍스트 레이어를 찾지 못했습니다."); 
+
         if (textLayer) {
           console.log(`마우스 감지`);
             textLayer.addEventListener('mouseup', handleMouseUp);
@@ -106,6 +71,7 @@ export default function UploadPage() {
         };
     }, [handleMouseUp]);
 
+    
     const translateText = async (text) => { // 텍스트 번역 요청
         try {
             console.log("Translating text:", text); // 번역 요청 시 로그 출력
@@ -164,156 +130,185 @@ export default function UploadPage() {
 
     };
 
+    // 페이지 번호에 맞게 스크롤 이동
+    const goToPage = (page) => {
+      const target = scroll.current;
+      const pageHeight = target.scrollHeight / totalPages;
+      setScrollEventBlocked(true); // 스크롤 이벤트를 일시적으로 비활성화
+      target.scrollTo({ top: (page - 1) * pageHeight, behavior: 'auto' });
+      setTimeout(() => setScrollEventBlocked(false), 500);
+  };
+
+
 
     return (
-        <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-
-          {/* 번역 결과 팝업 모달 */}
-          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} translatedText={translatedText} />
-
-             {/* PDF 뷰어 창 */}
-            <div style={{ width: '50%', overflowY: 'auto', borderRight: '1px solid #ccc', padding: '10px' }}>
-
-            {/* PDF 기능 메뉴바 */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px', backgroundColor: '#f0f0f0', padding: "10px" }}> 
-
+      <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+    
+        {/* 번역 결과 팝업 모달 */}
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} translatedText={translatedText} />
+          
+        {/* PDF 뷰어 및 기능 메뉴바를 한 영역에 배치 */}
+        <div style={{ width: '50%', display: 'flex', flexDirection: 'column' }}>
+    
+          {/* PDF 기능 메뉴바 */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px', backgroundColor: '#f0f0f0', padding: '10px' }}> 
+    
             {/* 페이지 크기 조절 */}
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <button onClick={() => setPageScale(pageScale >= 3 ? 3 : pageScale + 0.1)} style={{ marginRight: '10px' }}>
+              <button onClick={() => setPageScale(pageScale >= 4 ? 4 : pageScale + 0.1)} style={{ marginRight: '10px' }}>
                 <ZoomIn />
-                </button>
-                <button onClick={() => setPageScale(pageScale <= 1 ? 1 : pageScale - 0.1)}>
+              </button>
+              <button onClick={() => setPageScale(pageScale <= 0.5 ? 0.5 : pageScale - 0.1)}>
                 <ZoomOut />
-                </button>
+              </button>
             </div>
-
+    
             {/* 페이지 이동 UI */}
             <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-                  {/* 이전 페이지 버튼 */}
-                  <button
-                    onClick={() => {
-                      if (pageNumber > 1) setPageNumber(pageNumber - 1);
-                    }}
-                    disabled={pageNumber <= 1}
-                    style={{ marginRight: '10px', padding: '5px', border: 'none', backgroundColor: '#f7f7f7', cursor: 'pointer' }}
-                  >
-                    <ChevronUp />
-                  </button>
+              {/* 이전 페이지 버튼 */}
+              <button
+                onClick={() => {
+                  if (pageNumber > 1) {
+                    const newPage = pageNumber - 1;
+                    setPageNumber(newPage);
+                    goToPage(newPage); // 해당 페이지로 스크롤 이동
 
-                  <input
-                      type="text"  // 숫자 입력을 텍스트로 변경하여 자유롭게 입력할 수 있도록 함
-                      value={pageNumber || ''}  // 빈 값 허용
-                      onChange={e => {
-                        const v = e.target.value;
+                  }
+                }}
+                disabled={pageNumber <= 1}
+                style={{ marginRight: '10px', padding: '5px', border: 'none', backgroundColor: '#f7f7f7', cursor: 'pointer' }}
+              >
+                <ChevronUp />
+              </button>
+              <input
+                    type="text"
+                    value={pageNumber || ''}
+                    onChange={e => {
+                    const v = e.target.value;
+                    if (v === '') {
+                        setPageNumber(1);
+                     } else {
+                        const numValue = parseInt(v, 10);
+                      if (!isNaN(numValue) && numValue >= 1 && numValue <= totalPages) {
+                        setPageNumber(numValue);
+                        goToPage(numValue); // 입력한 페이지로 스크롤 이동
+                      }
+                    }
+                 }}
+                min={1}
+                max={totalPages}
+                style={{
+                  width: '40px',
+                  textAlign: 'center',
+                  border: '1px solid #ccc',
+                  borderRadius: '5px',
+                  marginRight: '10px',
+                  padding: '5px',
+                }}
+              />
+    
+              {/* 다음 페이지 버튼 */}
+              <button
+                onClick={() => {
+                  if (pageNumber < totalPages) {
+                    const newPage = pageNumber + 1;
+                    setPageNumber(newPage);
+                    goToPage(newPage);
+                  }
+                }}
+                disabled={pageNumber >= totalPages}
+                style={{ marginLeft: '0px', padding: '5px', border: 'none', backgroundColor: '#f7f7f7', cursor: 'pointer' }}
+              >
+                <ChevronDown />
+              </button>
+            </div>
+          </div>
+          
+          {/* PDF 뷰어 창 */}
+          <div
+              style={{ flex: 1, overflowY: 'auto', borderRight: '1px solid #ccc', padding: '10px' }}
+              ref={scroll} // 스크롤 요소에 대한 참조 추가
+              onScroll={(e) => {
+                const target = e.target as HTMLDivElement; // e.target을 HTMLDivElement로 명시적으로 캐스팅
+                const scrollTop = target.scrollTop; // 스크롤의 상단 위치
+                const scrollHeight = target.scrollHeight; // 전체 스크롤 가능한 높이
+                const pageHeight = scrollHeight / totalPages; // 각 페이지의 높이 계산
 
-                        // 빈 문자열이면 페이지 번호를 초기화하지 않고, 빈 값으로 유지
-                        if (v === '') {
-                          setPageNumber(0);
-                        } else {
-                          const numValue = parseInt(v, 10);
-                          // 숫자 범위가 유효하면 페이지 번호 설정
-                          if (!isNaN(numValue) && numValue >= 1 && numValue <= totalPages) {
-                            setPageNumber(numValue);
-                          }
-                        }
-                      }}
-                      min={1}
-                      max={totalPages}
-                      style={{
-                        width: '40px',
-                        textAlign: 'center',
-                        border: '1px solid #ccc',
-                        borderRadius: '5px',
-                        marginRight: '10px',
-                        padding: '5px',
-                      }}
-                    />
 
+                // 페이지 번호 계산
+                let currentPage = Math.ceil(scrollTop / pageHeight);
 
-                  {/* 다음 페이지 버튼 */}
-                  <button
-                    onClick={() => {
-                      if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
-                    }}
-                    disabled={pageNumber >= totalPages}
-                    style={{ marginLeft: '0px', padding: '5px', border: 'none', backgroundColor: '#f7f7f7', cursor: 'pointer' }}
-                  >
-                    <ChevronDown />
-                  </button>
+                // currentPage가 totalPages를 초과하지 않도록 제한
+                currentPage = Math.min(currentPage, totalPages - 1);
+
+                // 페이지 번호 업데이트
+                setPageNumber(currentPage + 1); 
+              }}
+            >
+            <Document file={imageurl} onLoadSuccess={onDocumentLoadSuccess}>
+          {Array.from(new Array(totalPages), (el, index) => (
+            <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={pageScale} />
+          ))}
+        </Document>
+          </div>
+    
+        </div>
+    
+        {/* 채팅 영역 */}
+        <div style={{ width: '50%', display: 'flex', flexDirection: 'column', padding: '10px', backgroundColor: '#fff' }}>
+          
+          {/* Q&A 기록 영역 */}
+          <div style={{ flex: 1, overflowY: 'auto', padding: '10px', marginBottom: '10px' }}>
+            {qaHistory.map((qa, index) => (
+              <div key={index} style={{ marginBottom: '20px' }}>
+                <div style={{ backgroundColor: '#d1e7dd', padding: '10px', borderRadius: '10px', textAlign: 'right' }}>
+                  <strong>You:</strong> {qa.question}
+                </div>
+                <div style={{ backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '10px', marginTop: '10px' }}>
+                  <strong>Bot:</strong> {qa.answer}
+                  <Cursor cursorColor='black' />
                 </div>
               </div>
-              
-              {/*페이지 넘김*/}
-              <Document file={imageurl} onLoadSuccess={onDocumentLoadSuccess}>
-                <Page pageNumber={pageNumber} scale={pageScale} />
-              </Document>
-
-            <Document file={imageurl} onLoadSuccess={onDocumentLoadSuccess}>  {/* PDF 뷰어 */}
-            {Array.from(new Array(totalPages), (el, index) => (
-                <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={pageScale} />
             ))}
-            </Document>
-            </div>
-
-           {/* 채팅 영역 */}
-      <div style={{ width: '50%', display: 'flex', flexDirection: 'column', padding: '10px', backgroundColor: '#fff' }}>
-        
-
-        {/* Q&A 기록 영역 */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '10px', marginBottom: '10px' }}>
-        {qaHistory.map((qa, index) => (
-            <div key={index} style={{ marginBottom: '20px' }}>
-            <div style={{ backgroundColor: '#d1e7dd', padding: '10px', borderRadius: '10px', textAlign: 'right' }}>
-                <strong>You:</strong> {qa.question}
-            </div>
-            <div style={{ backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '10px', marginTop: '10px' }}>
+    
+            {/* Display loader in bot's bubble while waiting for response */}
+            {loading && (
+              <div style={{ backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '10px', marginTop: '10px' }}>
                 <strong>Bot:</strong>
-                {qa.answer} 
-                <Cursor cursorColor='black' />
-            </div>
-            </div>
-        ))}
-
-        {/* Display loader in bot's bubble while waiting for response */}
-        {loading && (
-            <div style={{ backgroundColor: "#f0f0f0", padding: "10px", borderRadius: "10px", marginTop: "10px" }}>
-              <strong>Bot:</strong>
-              <ChatLoader />
-            </div>
-          )}
-
-
-        </div>
-
-
-        {/* 질문 입력 및 제출 버튼 */}
-        <form 
-          onSubmit={handleSubmit} 
-          style={{ display: 'flex', alignItems: 'center', padding: '10px', backgroundColor: '#e0e0e0' }}
-        >
-          <input 
-            type="text"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            placeholder="Enter your question"
-            style={{ flex: 1, padding: '10px', marginRight: '10px', borderRadius: '10px', border: '1px solid #ccc', backgroundColor: '#fff' }}
-          />
-          <button
-            type="submit"
-            disabled={!question.trim()}
-            style={{
-              padding: '10px',
-              backgroundColor: question.trim() ? '#333' : '#ccc',
-              color: question.trim() ? 'white' : 'gray',
-              cursor: question.trim() ? 'pointer' : 'not-allowed',
-              borderRadius: '8px',
-              border: 'none'
-            }}
+                <ChatLoader size='32px' color='blue' />
+              </div>
+            )}
+    
+          </div>
+    
+          {/* 질문 입력 및 제출 버튼 */}
+          <form 
+            onSubmit={handleSubmit} 
+            style={{ display: 'flex', alignItems: 'center', padding: '10px', backgroundColor: '#e0e0e0' }}
           >
-            <Send className="size-4" />
-          </button>
-        </form>
+            <input 
+              type='text'
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              placeholder='Enter your question'
+              style={{ flex: 1, padding: '10px', marginRight: '10px', borderRadius: '10px', border: '1px solid #ccc', backgroundColor: '#fff' }}
+            />
+            <button
+              type='submit'
+              disabled={!question.trim()}
+              style={{
+                padding: '10px',
+                backgroundColor: question.trim() ? '#333' : '#ccc',
+                color: question.trim() ? 'white' : 'gray',
+                cursor: question.trim() ? 'pointer' : 'not-allowed',
+                borderRadius: '8px',
+                border: 'none'
+              }}
+            >
+              <Send className='size-4' />
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  );
+    );
 }

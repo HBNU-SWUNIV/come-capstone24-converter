@@ -9,7 +9,7 @@ def load_llm_model():
     # model_id = 'MLP-KTLim/llama-3-Korean-Bllossom-8B-gguf-Q4_K_M'
     tokenizer = AutoTokenizer.from_pretrained('app/local_load/model')
     llm = Llama(
-        model_path='app/local_load/model/llama-3-Korean-Bllossom-8B-Q4_K_M.gguf', #다운로드받은 모델의 위치
+        model_path='app/llama-3-Korean-Bllossom-8B-Q4_K_M.gguf', #다운로드받은 모델의 위치
         n_ctx=4096,
         n_gpu_layers=-1,        # Number of model layers to offload to GPU
         verbose=False
