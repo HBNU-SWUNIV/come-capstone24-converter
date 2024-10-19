@@ -7,10 +7,11 @@ import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import { Send, ZoomIn, ZoomOut, ChevronUp, ChevronDown } from "lucide-react";
 import {useTypewriter, Cursor} from "react-simple-typewriter";
-//import { IconDots } from "@tabler/icons-react";
+import { IconDots } from "@tabler/icons-react";
 
 import Modal from '../../components/Modal';
 import ChatLoader from '../../components/ChatLoader';
+import styles from '../../styles/uploadPage.module.css'; // CSS 모듈 가져오기
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -142,19 +143,19 @@ export default function UploadPage() {
 
 
     return (
-      <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+      <div className={styles.container}>
     
         {/* 번역 결과 팝업 모달 */}
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} translatedText={translatedText} />
           
         {/* PDF 뷰어 및 기능 메뉴바를 한 영역에 배치 */}
-        <div style={{ width: '50%', display: 'flex', flexDirection: 'column' }}>
+        <div className={styles.pdfSection}>
     
           {/* PDF 기능 메뉴바 */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px', backgroundColor: '#f0f0f0', padding: '10px' }}> 
+          <div className={styles.menuBar}> 
     
             {/* 페이지 크기 조절 */}
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div className={styles.pagescale}>
               <button onClick={() => setPageScale(pageScale >= 4 ? 4 : pageScale + 0.1)} style={{ marginRight: '10px' }}>
                 <ZoomIn />
               </button>
@@ -164,7 +165,7 @@ export default function UploadPage() {
             </div>
     
             {/* 페이지 이동 UI */}
-            <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+            <div className={styles.pagebutton}>
               {/* 이전 페이지 버튼 */}
               <button
                 onClick={() => {
@@ -176,7 +177,7 @@ export default function UploadPage() {
                   }
                 }}
                 disabled={pageNumber <= 1}
-                style={{ marginRight: '10px', padding: '5px', border: 'none', backgroundColor: '#f7f7f7', cursor: 'pointer' }}
+                className={styles.beforemenuButton}
               >
                 <ChevronUp />
               </button>
@@ -197,14 +198,7 @@ export default function UploadPage() {
                  }}
                 min={1}
                 max={totalPages}
-                style={{
-                  width: '40px',
-                  textAlign: 'center',
-                  border: '1px solid #ccc',
-                  borderRadius: '5px',
-                  marginRight: '10px',
-                  padding: '5px',
-                }}
+                className={styles.pageInput}
               />
     
               {/* 다음 페이지 버튼 */}
@@ -217,7 +211,7 @@ export default function UploadPage() {
                   }
                 }}
                 disabled={pageNumber >= totalPages}
-                style={{ marginLeft: '0px', padding: '5px', border: 'none', backgroundColor: '#f7f7f7', cursor: 'pointer' }}
+                className={styles.aftermenuButton}
               >
                 <ChevronDown />
               </button>
@@ -226,7 +220,7 @@ export default function UploadPage() {
           
           {/* PDF 뷰어 창 */}
           <div
-              style={{ flex: 1, overflowY: 'auto', borderRight: '1px solid #ccc', padding: '10px' }}
+              className={styles.pdfViewer}
               ref={scroll} // 스크롤 요소에 대한 참조 추가
               onScroll={(e) => {
                 const target = e.target as HTMLDivElement; // e.target을 HTMLDivElement로 명시적으로 캐스팅
@@ -255,25 +249,22 @@ export default function UploadPage() {
         </div>
     
         {/* 채팅 영역 */}
-        <div style={{ width: '50%', display: 'flex', flexDirection: 'column', padding: '10px', backgroundColor: '#fff' }}>
+        <div className={styles.chatSection}>
           
           {/* Q&A 기록 영역 */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: '10px', marginBottom: '10px' }}>
+          <div className={styles.historySection}>
             {qaHistory.map((qa, index) => (
-              <div key={index} style={{ marginBottom: '20px' }}>
-                <div style={{ backgroundColor: '#d1e7dd', padding: '10px', borderRadius: '10px', textAlign: 'right' }}>
+              <div key={index} className={`${styles.qaBubble} ${styles.qaQuestion}`}>
                   <strong>You:</strong> {qa.question}
-                </div>
-                <div style={{ backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '10px', marginTop: '10px' }}>
-                  <strong>Bot:</strong> {qa.answer}
-                  <Cursor cursorColor='black' />
-                </div>
+                  <div className={`${styles.qaBubble} ${styles.qaAnswer}`}>
+                      <strong>Bot:</strong> {qa.answer}
+                  </div>
               </div>
             ))}
     
             {/* Display loader in bot's bubble while waiting for response */}
             {loading && (
-              <div style={{ backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '10px', marginTop: '10px' }}>
+              <div className={`${styles.qaBubble} ${styles.qaAnswer}`}>
                 <strong>Bot:</strong>
                 <ChatLoader size='32px' color='blue' />
               </div>
@@ -284,27 +275,22 @@ export default function UploadPage() {
           {/* 질문 입력 및 제출 버튼 */}
           <form 
             onSubmit={handleSubmit} 
-            style={{ display: 'flex', alignItems: 'center', padding: '10px', backgroundColor: '#e0e0e0' }}
+            className={styles.form}
           >
             <input 
               type='text'
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               placeholder='Enter your question'
-              style={{ flex: 1, padding: '10px', marginRight: '10px', borderRadius: '10px', border: '1px solid #ccc', backgroundColor: '#fff' }}
+              className={styles.input}
             />
-            <button
-              type='submit'
-              disabled={!question.trim()}
-              style={{
-                padding: '10px',
-                backgroundColor: question.trim() ? '#333' : '#ccc',
-                color: question.trim() ? 'white' : 'gray',
-                cursor: question.trim() ? 'pointer' : 'not-allowed',
-                borderRadius: '8px',
-                border: 'none'
-              }}
-            >
+          <button
+              className={`${styles.submitButton} ${
+                question.trim() ? styles.submitButtonEnabled : styles.submitButtonDisabled
+                }`}
+                type="submit"
+                disabled={!question.trim()}
+              >
               <Send className='size-4' />
             </button>
           </form>

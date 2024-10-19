@@ -4,8 +4,6 @@
 import styles from "../styles/dropbox.module.css";
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-//import { faDropbox } from '@fortawesome/free-brands-svg-icons'
 import { Upload } from "lucide-react";
 
 export default function FileUploaderDrag() {
@@ -13,6 +11,7 @@ export default function FileUploaderDrag() {
     const [loading, setLoading] = useState(false); // 로딩 상태
     const fileInputRef = useRef(null);
     const router = useRouter();
+
 
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -68,7 +67,8 @@ export default function FileUploaderDrag() {
         } catch (error) {
             console.error("Something went wrong, check your console.");
         } finally {
-            setLoading(false); // 로딩 종료
+             // 1초 후 로딩 종료
+             setTimeout(() => setLoading(false), 1000);
         }
 
     };
