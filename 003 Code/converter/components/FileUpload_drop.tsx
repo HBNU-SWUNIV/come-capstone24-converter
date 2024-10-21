@@ -2,13 +2,14 @@
 'use client'
 
 import styles from "../styles/dropbox.module.css";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect  } from "react";
 import { useRouter } from "next/navigation";
 import { Upload } from "lucide-react";
 
 export default function FileUploaderDrag() {
     const [isDragging, setIsDragging] = useState(false);
     const [loading, setLoading] = useState(false); // 로딩 상태
+    const [recentFiles, setRecentFiles] = useState([]);
     const fileInputRef = useRef(null);
     const router = useRouter();
 
@@ -61,7 +62,7 @@ export default function FileUploaderDrag() {
             
             console.log("Received URL:", data.url); // URL이 정상적으로 받아졌는지 확인
             
-              router.push(`/upload?image_url=${data.url}`);
+            router.push(`/upload?image_url=${data.url}`);
 
 
         } catch (error) {
@@ -69,11 +70,32 @@ export default function FileUploaderDrag() {
         } finally {
              // 1초 후 로딩 종료
              setTimeout(() => setLoading(false), 1000);
+             fetchRecentFiles(); // 업로드 후 목록 갱신
         }
 
     };
 
+    const fetchRecentFiles = async () => {
+        try {
+            const res = await fetch("http://127.0.0.1:2000/s3r/list");
+            if (res.ok) {
+                const data = await res.json();
+                setRecentFiles(data);
+            } else {
+                console.error("Failed to fetch recent files");
+            }
+        } catch (error) {
+            console.error("Error fetching recent files:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchRecentFiles();
+    }, []);
+
+
     return (
+        <div className={styles.container}>
         <div className={styles.dropZone}>
             <div
                 className={`${styles.dropZoneInner} ${isDragging ? 'isDragging' : ''}`}
@@ -122,5 +144,22 @@ export default function FileUploaderDrag() {
                 )}
             </div>
         </div>
+            <div className={styles.recentFiles}>
+                <h3>Recent Files</h3>
+                <div className={styles.fileList}>
+                    {recentFiles.map((file, index) => (
+                        <div key={index} className={styles.fileBlock}>
+                            <a href={file.url} target="_blank" rel="noopener noreferrer">
+                            <div className={styles.fileInfo}>
+                                <p className={styles.fileName}>{file.fileName}</p>
+                                <p className={styles.fileSize}>{file.size}</p>
+                            </div>
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+        
     );
 }

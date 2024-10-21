@@ -88,9 +88,11 @@ export default function UploadPage() {
             console.error('Error translating text:', error);
         }
     };
+    
     const handleSubmit = async (e) => { // 사용자가 질문을 제출하면 해당 질문을 처리하는 로직
       e.preventDefault();
       setLoading(true);
+
 
       try {
           const response = await fetch('http://127.0.0.1:2000/localQna/answer', { // Q&A 처리 API 경로
@@ -127,6 +129,8 @@ export default function UploadPage() {
         const [text] = useTypewriter({
             words: [answer],
             loop: 1,
+            typeSpeed: 50, // 타이핑 속도 조정
+            deleteSpeed: 0, // 삭제하지 않도록 설정
         });
 
     };
@@ -139,7 +143,6 @@ export default function UploadPage() {
       target.scrollTo({ top: (page - 1) * pageHeight, behavior: 'auto' });
       setTimeout(() => setScrollEventBlocked(false), 500);
   };
-
 
 
     return (
@@ -254,13 +257,20 @@ export default function UploadPage() {
           {/* Q&A 기록 영역 */}
           <div className={styles.historySection}>
             {qaHistory.map((qa, index) => (
-              <div key={index} className={`${styles.qaBubble} ${styles.qaQuestion}`}>
+              <div key={index} className={styles.messageContainer}>
+                
+                {/* 사용자 질문 */}
+                <div className={`${styles.qaBubble} ${styles.qaQuestion}`}>
                   <strong>You:</strong> {qa.question}
-                  <div className={`${styles.qaBubble} ${styles.qaAnswer}`}>
-                      <strong>Bot:</strong> {qa.answer}
-                  </div>
+                </div>
+
+                {/* 봇 응답 */}
+                <div className={`${styles.qaBubble} ${styles.qaAnswer}`}>
+                  <strong>Bot:</strong> {qa.answer}
+                </div>
               </div>
             ))}
+
     
             {/* Display loader in bot's bubble while waiting for response */}
             {loading && (

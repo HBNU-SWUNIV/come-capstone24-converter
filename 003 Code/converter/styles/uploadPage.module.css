@@ -92,6 +92,13 @@
     padding: 10px;
     margin-bottom: 10px;
   }
+
+  
+  .messageContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
   
   /* Q&A 버블 */
   .qaBubble {
