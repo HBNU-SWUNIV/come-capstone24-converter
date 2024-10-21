@@ -129,3 +129,17 @@ def file_size_trans(size):
         size = str(size) + 'B'
     
     return size
+
+
+@s3r.delete("/delete", tags=['s3r'])
+async def delete_file(fileName: str):
+    try:
+        # 삭제할 S3 객체의 키 생성
+        s3_key = f"uploads/11-04-2024/{fileName}"
+        
+        # S3 객체 삭제
+        s3_client.delete_object(Bucket=BUCKET_NAME, Key=s3_key)
+
+        return JSONResponse(content={"message": f"File '{fileName}' deleted successfully."})
+    except (BotoCoreError, ClientError) as e:
+        raise HTTPException(status_code=500, detail=f"Failed to delete file: {str(e)}")

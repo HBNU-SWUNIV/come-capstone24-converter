@@ -2,154 +2,153 @@
 
 /* 전체 레이아웃 */
 .container {
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  /* PDF와 메뉴바를 포함하는 왼쪽 섹션 */
-  .pdfSection {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* 메뉴바 */
-  .menuBar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-    background-color: #f0f0f0;
-    padding: 10px;
-  }
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
 
-  /*페이지 크기 조절 아이콘*/
-  .pagescale {
-    display: flex;
-    align-items: center;
-  }
-  
-  /* 페이지 이동 부분 */
-  .pagebutton {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-  }
+/* PDF와 메뉴바를 포함하는 왼쪽 섹션 */
+.pdfSection {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
 
-  /* 이전 메뉴 버튼 */
-  .beforemenuButton {
-    margin-right: 10px;
-    padding: 5px;
-    border: none;
-    background-color: #f7f7f7;
-    cursor: pointer;
-  }
-  
-   /* 다음 메뉴 버튼 */
-   .aftermenuButton {
-    margin-left: 0px;
-    padding: 5px;
-    border: none;
-    background-color: #f7f7f7;
-    cursor: pointer;
-  }
+/* 메뉴바 */
+.menuBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  background-color: #f0f0f0;
+  padding: 10px;
+}
 
-  /* 페이지 번호 입력 */
-  .pageInput {
-    width: 40px;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 10px;
-    padding: 5px;
-  }
+/*페이지 크기 조절 아이콘*/
+.pagescale {
+  display: flex;
+  align-items: center;
+}
+
+/* 페이지 이동 부분 */
+.pagebutton {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* 이전 메뉴 버튼 */
+.beforemenuButton {
+  margin-right: 10px;
+  padding: 5px;
+  border: none;
+  background-color: #f7f7f7;
+  cursor: pointer;
+}
+
+ /* 다음 메뉴 버튼 */
+ .aftermenuButton {
+  margin-left: 0px;
+  padding: 5px;
+  border: none;
+  background-color: #f7f7f7;
+  cursor: pointer;
+}
+
+/* 페이지 번호 입력 */
+.pageInput {
+  width: 40px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  padding: 5px;
+}
 
 
-  /* PDF 뷰어 */
-  .pdfViewer {
-    flex: 1;
-    overflow-y: auto;
-    border-right: 1px solid #ccc;
-    padding: 10px;
-  }
-  
+/* PDF 뷰어 */
+.pdfViewer {
+  flex: 1;
+  overflow-y: auto;
+  border-right: 1px solid #ccc;
+  padding: 10px;
+}
 
-  
-  /* 채팅 영역 */
-  .chatSection {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    background-color: #fff;
-  }
-  
-  /* Q&A 기록 */
-  .historySection {
-    flex: 1;
-    overflow-y: auto;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
 
-  
-  .messageContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  
-  /* Q&A 버블 */
-  .qaBubble {
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .qaQuestion {
-    background-color: #d1e7dd;
-    text-align: right;
-  }
-  
-  .qaAnswer {
-    background-color: #f0f0f0;
-    margin-top: 10px;
-  }
-  
-  /* 질문 입력 영역 */
-  .form {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: #e0e0e0;
-  }
-  
-  .input {
-    flex: 1;
-    padding: 10px;
-    margin-right: 10px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-  }
-  
-  /* 제출 버튼 */
-  .submitButton {
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .submitButtonEnabled {
-    background-color: #333;
-    color: white;
-  }
-  
-  .submitButtonDisabled {
-    background-color: #ccc;
-    color: gray;
-    cursor: not-allowed;
-  }
-  
+
+/* 채팅 영역 */
+.chatSection {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: #fff;
+}
+
+/* Q&A 기록 */
+.historySection {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Q&A 버블 */
+.qaBubble {
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.qaQuestion {
+  background-color: #d1e7dd;
+  text-align: right;
+}
+
+.qaAnswer {
+  background-color: #f0f0f0;
+  margin-top: 10px;
+}
+
+/* 질문 입력 영역 */
+.form {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #e0e0e0;
+}
+
+.input {
+  flex: 1;
+  padding: 10px;
+  margin-right: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+/* 제출 버튼 */
+.submitButton {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.submitButtonEnabled {
+  background-color: #333;
+  color: white;
+}
+
+.submitButtonDisabled {
+  background-color: #ccc;
+  color: gray;
+  cursor: not-allowed;
+}

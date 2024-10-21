@@ -4,7 +4,7 @@
 import styles from "../styles/dropbox.module.css";
 import React, { useState, useRef, useEffect  } from "react";
 import { useRouter } from "next/navigation";
-import { Upload } from "lucide-react";
+import { X, Upload } from "lucide-react";
 
 export default function FileUploaderDrag() {
     const [isDragging, setIsDragging] = useState(false);
@@ -80,6 +80,7 @@ export default function FileUploaderDrag() {
             const res = await fetch("http://127.0.0.1:2000/s3r/list");
             if (res.ok) {
                 const data = await res.json();
+                console.log(data);
                 setRecentFiles(data);
             } else {
                 console.error("Failed to fetch recent files");
@@ -92,6 +93,25 @@ export default function FileUploaderDrag() {
     useEffect(() => {
         fetchRecentFiles();
     }, []);
+
+
+    const deleteFile = async (fileName) => {
+        try {
+            const res = await fetch(`http://127.0.0.1:2000/s3r/delete?fileName=${fileName}`, {
+                method: "DELETE",
+            });
+    
+            if (res.ok) {
+                const data = await res.json();
+                console.log(data.message); // 삭제 성공 메시지 확인
+                fetchRecentFiles(); // 파일 삭제 후 목록 갱신
+            } else {
+                console.error("Failed to delete file.");
+            }
+        } catch (error) {
+            console.error("Error deleting file:", error);
+        }
+    };
 
 
     return (
@@ -145,10 +165,14 @@ export default function FileUploaderDrag() {
             </div>
         </div>
             <div className={styles.recentFiles}>
-                <h3>Recent Files</h3>
+                <h3><b>Recent Files</b></h3>
                 <div className={styles.fileList}>
                     {recentFiles.map((file, index) => (
                         <div key={index} className={styles.fileBlock}>
+                            <X
+                                className={styles.deleteIcon}
+                                onClick={() => deleteFile(file.fileName)}
+                            />
                             <a href={file.url} target="_blank" rel="noopener noreferrer">
                             <div className={styles.fileInfo}>
                                 <p className={styles.fileName}>{file.fileName}</p>
