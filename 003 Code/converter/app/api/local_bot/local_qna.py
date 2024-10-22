@@ -3,8 +3,10 @@ import os
 import tempfile
 import requests
 import chromadb
+from chromadb.utils import embedding_functions
 from uuid import uuid4
 from fastapi import FastAPI, HTTPException, Request, APIRouter
+from fastapi import UploadFile
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
@@ -17,134 +19,159 @@ from langchain.chains import create_retrieval_chain
 localQna = APIRouter(prefix='/localQna')
 
 
-# 모델을 한 번 로드하고 여러 요청에 재사용
-llm, tokenizer = load_llm_model()
-hfe = load_embedding_model()  # 임베딩 모델도 한 번 로드
+
+# pdf_file_path = ''
+# # 모델을 한 번 로드하고 여러 요청에 재사용
+# llm, tokenizer = load_llm_model()
+# hfe = load_embedding_model()  # 임베딩 모델도 한 번 로드
+
+# client = chromadb.PersistentClient(path="../../../db")
+# print("db connected")
+
+# embedding_function =\
+#     embedding_functions.SentenceTransformerEmbeddingFunction(
+
+#     model_name="BAAI/bge-m3", trust_remote_code=True
+# )
 
 
-# 프롬프트 설정 (일반 질문, 요약, 번역)
-system_prompt_general = (
-    "You are an assistant for general question-answering tasks. "
-    "Provide accurate and concise information. Answer in Korean."
-    "\n"
-    # "{context}"
-)
+# # 프롬프트 설정 (일반 질문, 요약, 번역)
+# system_prompt_general = (
+#     "You are an assistant for general question-answering tasks. "
+#     "Provide accurate and concise information. Answer in Korean."
+#     "\n"
+#     # "{context}"
+# )
 
 
-system_prompt_summary = (
-    "You are an assistant specialized in summarizing academic papers. "
-    "Summarize the provided text in three to five sentences. Answer in Korean."
-    "\n"
-    # "{context}"
-)
+# system_prompt_summary = (
+#     "You are an assistant specialized in summarizing academic papers. "
+#     "Summarize the provided text in three to five sentences. Answer in Korean."
+#     "\n"
+#     # "{context}"
+# )
 
 
-system_prompt_translation = (
-    "You are an assistant that translates English to Korean. "
-    "Translate the following text accurately and naturally into Korean."
-    "\n"
-    # "{context}"
-)
+# system_prompt_translation = (
+#     "You are an assistant that translates English to Korean. "
+#     "Translate the following text accurately and naturally into Korean."
+#     "\n"
+#     # "{context}"
+# )
 
 
-# 질의 분석 함수: 사용자의 요청이 요약인지, 번역인지 결정
-def analyze_query(query):
-    query_lower = query.lower()
-    if "요약" in query_lower or "summarize" in query_lower:
-        return "summary"
-    elif "번역" in query_lower or "translate" in query_lower:
-        return "translation"
-    else:
-        return "general"
+# # 질의 분석 함수: 사용자의 요청이 요약인지, 번역인지 결정
+# def analyze_query(query):
+#     query_lower = query.lower()
+#     if "요약" in query_lower or "summarize" in query_lower:
+#         return "summary"
+#     elif "번역" in query_lower or "translate" in query_lower:
+#         return "translation"
+#     else:
+#         return "general"
 
 
-def handle_retriever(path: str):
-    client = chromadb.PersistentClient("../../../db")
-    try:
-        vector_store = Chroma(client=client,
-                              collection_name=os.path.basename(path),
-                              embedding_function=hfe,
-                              create_collection_if_not_exists=False)
-    except:
-        loader = PyPDFLoader(path)
-        pages = loader.load()
-
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-        chunks = text_splitter.split_documents(pages)
-
-        vector_store = Chroma(
-            client=client,
-            collection_name=os.path.basename(path),
-            embedding_function=hfe,
-            create_collection_if_not_exists=True
-        )
-        vector_store.add_documents(documents=chunks, ids=[str(uuid4()) for _ in range(len(chunks))])
-
-    retriever = vector_store.as_retriever()
-    return retriever
+# def get_db_collection(path: str) -> chromadb.Collection:
+#     try:
+#         collection = client.get_collection(
+#             name=os.path.basename(path),
+#             embedding_function=embedding_function,
+#         )
+#     except ValueError as e:
+#         print(e)
 
 
-# 프롬프트 선택 및 응답 생성 함수
-def handle_query(query, retriever):
-    # 질의 분석하여 요약, 번역, 일반 질문 구분
-    query_type = analyze_query(query)
+# def query_collection(collection: chromadb.Collection, query_text: str):
+#     query_results = collection.query(
+#         query_texts=[query_text],
+#         n_results=3,
+#     )
+
+#     return query_results
+
+
+# def generate_context(query_result: dict):
+#     context = ""
+#     for doc in query_result.documents:
+#         for i in doc:
+#             context += i
+#             context += "\n"
+#     return context
+
+
+# # 프롬프트 선택 및 응답 생성 함수
+# def handle_query(query):
+#     # 질의 분석하여 요약, 번역, 일반 질문 구분
+#     query_type = analyze_query(query)
     
-    if query_type == "summary":
-        chosen_prompt = ChatPromptTemplate.from_messages([("system", system_prompt_summary), ("human", "{input}")])
-    elif query_type == "translation":
-        chosen_prompt = ChatPromptTemplate.from_messages([("system", system_prompt_translation), ("human", "{input}")])
-    else:
-        chosen_prompt = ChatPromptTemplate.from_messages([("system", system_prompt_general), ("human", "{input}")])
+#     if query_type == "summary":
+#         # chosen_prompt = ChatPromptTemplate.from_messages([("system", system_prompt_summary), ("human", "{input}")])
+#         chosen_prompt = system_prompt_summary
+#     elif query_type == "translation":
+#         # chosen_prompt = ChatPromptTemplate.from_messages([("system", system_prompt_translation), ("human", "{input}")])
+#         chosen_prompt = system_prompt_translation
+#     else:
+#         # chosen_prompt = ChatPromptTemplate.from_messages([("system", system_prompt_general), ("human", "{input}")])
+#         chosen_prompt = system_prompt_general
     
-    # LLM 체인 생성
+#     # LLM 체인 생성
   
-    # qa_chain = create_stuff_documents_chain(llm, chosen_prompt)
-    # rag_chain = create_retrieval_chain(retriever, qa_chain)
+#     # qa_chain = create_stuff_documents_chain(llm, chosen_prompt)
+#     # rag_chain = create_retrieval_chain(retriever, qa_chain)
     
-    # 질문에 대한 답변 생성
-    # response = rag_chain.invoke({"input": query})
-    contexts = retriever.invoke(query)
+#     # 질문에 대한 답변 생성
+#     # response = rag_chain.invoke({"input": query})
+#     # contexts = retriever.invoke(query)
     
-    return contexts, chosen_prompt
+#     return chosen_prompt
 
 
-def generate_text(prompt, instruction, contexts):
-    tmp = ''
-    for context in contexts:
-        tmp += f"{context.page_content}\n"
+# def generate_text(prompt, instruction, tmp):
+#     # tmp = generate_context(instruction)
+#     # for context in contexts:
+#     #     tmp += f"{context.page_content}\n"
 
-    SYSTEM_PROMPT = prompt
-    USER_PROMPT = f"""
-    Question: {instruction}\n\n
-    Context: {tmp}"""
+#     SYSTEM_PROMPT = prompt
+#     USER_PROMPT = f"""
+#     Question: {instruction}\n\n
+#     Context: {tmp}"""
 
-    messages = [
-        {"role": "system", "content": f"{SYSTEM_PROMPT}"},
-        {"role": "user", "content": f"{USER_PROMPT}"}
-    ]
+#     messages = [
+#         {"role": "system", "content": f"{SYSTEM_PROMPT}"},
+#         {"role": "user", "content": f"{USER_PROMPT}"}
+#     ]
 
-    prompt = tokenizer.apply_chat_template(
-        messages,
-        tokenize=False,
-        add_generation_prompt=True
-    )
+#     prompt = tokenizer.apply_chat_template(
+#         messages,
+#         tokenize=False,
+#         add_generation_prompt=True
+#     )
 
-    generation_kwargs = {
-        "max_tokens":512,
-        "stop":["<|eot_id|>"],
-        "top_p":0.1,
-        "temperature":0.1,
-        "echo":True,
-    }
+#     generation_kwargs = {
+#         "max_tokens":512,
+#         "stop":["<|eot_id|>"],
+#         "top_p":0.1,
+#         "temperature":0.1,
+#         "echo":True,
+#     }
 
-    response_msg = llm(prompt, repeat_penalty=1.3, **generation_kwargs)
-    text = response_msg['choices'][0]['text'][len(prompt):]
-    return text
+#     response_msg = llm(prompt, repeat_penalty=1.3, **generation_kwargs)
+#     text = response_msg['choices'][0]['text'][len(prompt):]
+#     return text
 
+@localQna.post('/upload')
+async def upload(file: UploadFile):
+    filename = file.filename
+    if not filename:
+        raise HTTPException(status_code=400, detail='No filename provided')
+    filename = filename.replace(' ', "_")
+
+    with 
 
 # FastAPI 경로 처리
 @localQna.post("/answer")
 async def generate_answer(request: Request):
+    global pdf_file_path
     data = await request.json()
     text = data.get("text")
     imageurl = data.get("pdf")
@@ -175,14 +202,18 @@ async def generate_answer(request: Request):
     # vectorstore = Chroma.from_documents(documents=splits, embedding=hfe)
     # retriever = vectorstore.as_retriever()
 
-    retriever = handle_retriever(pdf_file_path)
+    # retriever = handle_retriever(pdf_file_path)
 
-    # 임시 파일 삭제
-    os.remove(pdf_file_path)
+    # collection = get_db_collection(pdf_file_path)
+    # contexts = query_collection(collection, text)
+    # tmp = generate_context(contexts)
 
-    # 사용자의 질의를 처리하고 응답 생성
-    contexts, PROMPT = handle_query(text, retriever)
-    result = generate_text(PROMPT, text, contexts)
+    # # 임시 파일 삭제
+    # os.remove(pdf_file_path)
+
+    # # 사용자의 질의를 처리하고 응답 생성
+    # PROMPT = handle_query(text)
+    # result = generate_text(PROMPT, text, tmp)
 
     # 응답 반환
     return {"answer": result}

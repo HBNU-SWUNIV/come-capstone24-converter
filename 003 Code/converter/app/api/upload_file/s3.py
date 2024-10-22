@@ -1,5 +1,8 @@
 import os
 import urllib
+# import tempfile
+import requests
+import aiofiles
 
 from dotenv import load_dotenv
 from fastapi import APIRouter
@@ -7,6 +10,7 @@ from fastapi import UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 from boto3 import client
 from botocore.exceptions import BotoCoreError, ClientError
+from db import get_db_collection, add_to_collection
 
 load_dotenv()
 
