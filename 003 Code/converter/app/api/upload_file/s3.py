@@ -70,7 +70,7 @@ def generate_s3_url(bucket, key):
 
 def lambda_handler(event, context):
     S3_BUCKET = "converter-upload-bucket"
-    list = get_file_list_s3(S3_BUCKET);
+    list = get_file_list_s3(S3_BUCKET)
 
     return {
         'statusCode': 200,

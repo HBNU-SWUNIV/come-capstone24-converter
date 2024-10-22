@@ -103,8 +103,8 @@ export default function UploadPage() {
                   'Content-Type': 'application/json',
               },
               body: JSON.stringify({ 
-                  text: question,
-                  pdf: imageurl,
+                  query: question,
+                  // pdf: imageurl,
               })
           });
   

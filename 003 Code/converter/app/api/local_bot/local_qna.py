@@ -14,13 +14,14 @@ from app.local_load.model_loader import load_llm_model, load_embedding_model  # 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
+from local_load.model_loader import RAG
 
 
 localQna = APIRouter(prefix='/localQna')
 
+ragInstance = None
 
-
-# pdf_file_path = ''
+pdf_file_path = ''
 # # 모델을 한 번 로드하고 여러 요청에 재사용
 # llm, tokenizer = load_llm_model()
 # hfe = load_embedding_model()  # 임베딩 모델도 한 번 로드
@@ -159,25 +160,24 @@ localQna = APIRouter(prefix='/localQna')
 #     text = response_msg['choices'][0]['text'][len(prompt):]
 #     return text
 
-@localQna.post('/upload')
-async def upload(file: UploadFile):
-    filename = file.filename
-    if not filename:
-        raise HTTPException(status_code=400, detail='No filename provided')
-    filename = filename.replace(' ', "_")
+@localQna.post('/answer')
+async def generate_answer(request: Request):
+    data = await request.json()
+    query = data.get('query')
 
-    with 
+    result = ragInstance.generate_response(query)
+    return {'answer': result}
 
 # FastAPI 경로 처리
-@localQna.post("/answer")
-async def generate_answer(request: Request):
-    global pdf_file_path
+@localQna.post("/upload")
+async def upload(request: Request):
+    global pdf_file_path, ragInstance
     data = await request.json()
-    text = data.get("text")
+    # text = data.get("text")
     imageurl = data.get("pdf")
 
     # 요청 본문에서 필수 필드 확인
-    if not text or not imageurl:
+    if not imageurl:
         raise HTTPException(status_code=400, detail="Missing text or imageurl")
     
     # PDF 파일을 메모리로 로드
@@ -189,6 +189,9 @@ async def generate_answer(request: Request):
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
         tmp_file.write(response.content)
         pdf_file_path = tmp_file.name
+
+    ragInstance = RAG(pdf_file_path)
+    print('RAG Instance Initiated...')
 
     # PyPDFLoader를 사용하여 PDF 파일의 텍스트 추출
     # loader = PyPDFLoader(pdf_file_path)
@@ -216,4 +219,4 @@ async def generate_answer(request: Request):
     # result = generate_text(PROMPT, text, tmp)
 
     # 응답 반환
-    return {"answer": result}
+    # return {"answer": result}

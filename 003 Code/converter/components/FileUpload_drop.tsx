@@ -62,6 +62,16 @@ export default function FileUploaderDrag() {
             
             console.log("Received URL:", data.url); // URL이 정상적으로 받아졌는지 확인
             
+            const res2 = await fetch("http://127.0.0.1:localQna/upload", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    pdf: data.url,
+                })
+            });
+
             router.push(`/upload?image_url=${data.url}`);
 
 
