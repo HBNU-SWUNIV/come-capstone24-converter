@@ -88,14 +88,16 @@ export default function UploadPage() {
             console.error('Error translating text:', error);
         }
     };
-    
-    const handleSubmit = async (e) => { // 사용자가 질문을 제출하면 해당 질문을 처리하는 로직
+    const handleSubmit = async (e) => {
       e.preventDefault();
       setLoading(true);
-
-
+  
+      // 사용자의 질문만 기록
+      const newQuestion = { question, answer: null }; // answer는 null로 설정하여 비워둠
+      setQaHistory((prevHistory) => [...prevHistory, newQuestion]); // 전에 질의응답 했던 기록 + 질문창만 
+  
       try {
-          const response = await fetch('http://127.0.0.1:2000/localQna/answer', { // Q&A 처리 API 경로
+          const response = await fetch('http://127.0.0.1:2000/localQna/answer', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
@@ -105,25 +107,27 @@ export default function UploadPage() {
                   pdf: imageurl,
               })
           });
-
+  
           if (!response.ok) {
               throw new Error('Network response was not ok');
           }
-
+  
           const data = await response.json();
-          setAnswer(data.answer);
-
-          // Q&A 기록을 업데이트
-          setQaHistory((prevHistory) => [...prevHistory, { question, answer: data.answer }]);
-          
+  
+          // 응답이 있을 때 해당 질문에 답변을 추가
+          setQaHistory((prevHistory) => {
+              const updatedHistory = [...prevHistory];
+              updatedHistory[updatedHistory.length - 1].answer = data.answer; // 마지막에 추가된 질문에 답변 설정
+              return updatedHistory;
+          });
+  
       } catch (error) {
-          console.error('Error fetching the answer:', error)
+          console.error('Error fetching the answer:', error);
       } finally {
           setLoading(false);
           setQuestion('');  // 입력 필드 초기화
       }
   };
-
    // Q&A 기록 영역에서 타이핑 효과를 적용
     const QaHistoryItem = ({ question, answer }) => {
         const [text] = useTypewriter({
@@ -263,12 +267,12 @@ export default function UploadPage() {
                 <div className={`${styles.qaBubble} ${styles.qaQuestion}`}>
                   <strong>You:</strong> {qa.question}
                 </div>
-
-                {/* 봇 응답 */}
-                <div className={`${styles.qaBubble} ${styles.qaAnswer}`}>
-                  <strong>Bot:</strong> {qa.answer}
-                </div>
-              </div>
+                {qa.answer !== null && ( // 모델을 통해 응답이 왔을 시에만 답변 출력 
+                    <div className={`${styles.qaBubble} ${styles.qaAnswer}`}>
+                        <strong>Bot:</strong> {qa.answer}
+                    </div>
+                )}
+                  </div>
             ))}
 
     
