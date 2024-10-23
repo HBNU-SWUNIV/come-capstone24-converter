@@ -71,8 +71,11 @@ export default function FileUploaderDrag() {
                     pdf: data.url,
                 })
             });
-
-            router.push(`/upload?image_url=${data.url}`);
+            console.log("data embedding 중...")
+            const checker: { answer: string } = await res.json();
+            
+            if (checker.answer == 'ok') {
+                router.push(`/upload?image_url=${data.url}`)};
 
 
         } catch (error) {

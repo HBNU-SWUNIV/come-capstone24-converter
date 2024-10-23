@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from app.api.upload_file.s3 import s3r
 from app.api.translate_text.translate import translate
 from app.api.qna_bot.QnAbot import qna
-from app.local_load.model_loader import load_llm_model, load_embedding_model
+# from app.local_load.model_loader import load_llm_model, load_embedding_model
 from app.api.local_bot.local_qna import localQna
 from contextlib import asynccontextmanager
 
@@ -23,27 +23,28 @@ embedding_model = None
 
  
 
-def start():
-    global llm_model, embedding_model
-    llm_model = load_llm_model()
-    embedding_model = load_embedding_model()
-    logger.info("Models loaded successfully")
+# def start():
+#     global llm_model, embedding_model
+#     llm_model = load_llm_model()
+#     embedding_model = load_embedding_model()
+#     logger.info("Models loaded successfully")
 
-def shutdown():
-    logger.info("Shutting down models")   
+# def shutdown():
+#     logger.info("Shutting down models")   
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # When service starts.
-    start()
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     # When service starts.
+#     start()
     
-    yield
+#     yield
     
-    # When service is stopped.
-    shutdown()
+#     # When service is stopped.
+#     shutdown()
 
 
-converter = FastAPI(lifespan=lifespan)
+# converter = FastAPI(lifespan=lifespan)
+converter = FastAPI()
 
 origins = [
     "http://localhost.tiangolo.com",

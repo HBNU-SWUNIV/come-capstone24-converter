@@ -20,7 +20,7 @@ class RAG():
     client = None
     collection = None
 
-    def __init__(self, file_name: str):
+    def __init__(self):
         # Init model
         self.tokenizer = AutoTokenizer.from_pretrained('app/local_load/model')
         self.model = Llama(
@@ -36,14 +36,14 @@ class RAG():
 
         self.client = chromadb.PersistentClient(path=CHROMA_CLIENT_PATH)
 
+
+    def add_chunks(self, path: str) -> None:
         self.collection = self.client.create_collection(
-                name=file_name,
+                name=path.split('.')[0],
                 embedding_function=self.embeddings,
                 metadata={'hnsw:space': 'cosine'}
             )
 
-
-    def add_chunks(self, path: str) -> None:
         loader = PyPDFLoader(path)
         pages = loader.load()
 

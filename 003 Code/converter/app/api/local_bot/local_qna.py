@@ -10,16 +10,17 @@ from fastapi import UploadFile
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
-from app.local_load.model_loader import load_llm_model, load_embedding_model  # 모델 로드 함수 임포트
+# from app.local_load.model_loader import load_llm_model, load_embedding_model  # 모델 로드 함수 임포트
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
-from local_load.model_loader import RAG
+
+from app.local_load.model_loader import RAG
 
 
 localQna = APIRouter(prefix='/localQna')
 
-ragInstance = None
+ragInstance = RAG()
 
 pdf_file_path = ''
 # # 모델을 한 번 로드하고 여러 요청에 재사용
@@ -190,7 +191,7 @@ async def upload(request: Request):
         tmp_file.write(response.content)
         pdf_file_path = tmp_file.name
 
-    ragInstance = RAG(pdf_file_path)
+    ragInstance.add_chunks(pdf_file_path)
     print('RAG Instance Initiated...')
 
     # PyPDFLoader를 사용하여 PDF 파일의 텍스트 추출
@@ -212,11 +213,11 @@ async def upload(request: Request):
     # tmp = generate_context(contexts)
 
     # # 임시 파일 삭제
-    # os.remove(pdf_file_path)
+    os.remove(pdf_file_path)
 
     # # 사용자의 질의를 처리하고 응답 생성
     # PROMPT = handle_query(text)
     # result = generate_text(PROMPT, text, tmp)
 
     # 응답 반환
-    # return {"answer": result}
+    return {"answer": 'ok'}
