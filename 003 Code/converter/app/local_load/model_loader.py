@@ -36,7 +36,7 @@ class RAG():
             normalize_embeddings = True,
         )
 
-        self.client = chromadb.PersistentClient(path=CHROMA_CLIENT_PATH)
+        self.client = chromadb.PersistentClient(path=CHROMA_CLIENT_PATH)        
 
 
     def add_chunks(self, path: str) -> None:
@@ -48,8 +48,6 @@ class RAG():
                 metadata={'hnsw:space': 'cosine'}
             )
 
-
-    def add_chunks(self, path: str) -> None:
         loader = PyPDFLoader(path)
         pages = loader.load()
 
