@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from app.api.upload_file.s3 import s3r
 from app.api.translate_text.translate import translate
 from app.api.qna_bot.QnAbot import qna
+# from app.api.explain_word.explain_word import
 from app.local_load.model_loader import load_llm_model, load_embedding_model
 from app.api.local_bot.local_qna import localQna
 from contextlib import asynccontextmanager
