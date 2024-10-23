@@ -264,46 +264,35 @@ export default function UploadPage() {
         {/* 채팅 영역 */}
         <div className={styles.chatSection}>
           
-          {/* Q&A 기록 영역 */}
-          <div className={styles.historySection}>
-            {qaHistory.map((qa, index) => (
-              <div key={index} className={styles.messageContainer}>
-                
-                {/* 사용자 질문 */}
-                <div className={`${styles.qaBubble} ${styles.qaQuestion}`}>
-                <div className={styles.messageRow}>
-                  <User className={styles.usericon}/>
-                  <div className={styles.messageContent}>
+        <div className={styles.historySection}>
+          {qaHistory.map((qa, index) => (
+            <div key={index} className={styles.messageContainer}>
+            {/* 사용자 질문 */}
+            <div className={`${styles.qaBubble} ${styles.qaQuestion}`}>
+              <div className={styles.messageRow}>
+                <User className={styles.usericon} />
+                <div className={styles.messageContent}>
                   {qa.question}
                 </div>
               </div>
             </div>
 
-                {qa.answer !== null && ( // 모델을 통해 응답이 왔을 시에만 답변 출력 
-                    <div className={`${styles.qaBubble} ${styles.qaAnswer}`}>
-                      <div className={styles.messageRow}>
-                       <Bot className={styles.boticon}/>
-                       <div className={styles.messageContent}>
-                        {qa.answer}
-                        </div>
-                        </div>
-                    </div>
-                )}
-                  </div>
-            ))}
-
-    
-            {/* 봇 로딩 */}
-            {loading && (
-              <div className={`${styles.qaBubble} ${styles.qaAnswer}`}>
-                <div className={styles.messageRow}>
-                <Bot className={styles.boticon}/>
+            {/* 항상 Bot 아이콘 표시 */}
+            <div className={`${styles.qaBubble} ${styles.qaAnswer}`}>
+              <div className={styles.messageRow}>
+                <Bot className={styles.boticon} />
                 <div className={styles.messageContent}>
-                  <ChatLoader size='32px' color='blue' />
+                  {/* 로딩 중일 때는 ChatLoader, 응답이 있으면 답변 표시 */}
+                  {qa.answer !== null ? (
+                    qa.answer
+                  ) : (
+                    <ChatLoader size="32px" color="blue" />
+                  )}
                 </div>
               </div>
             </div>
-            )}
+          </div>
+        ))}
     
           </div>
     
