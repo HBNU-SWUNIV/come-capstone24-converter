@@ -85,10 +85,10 @@ export default function FileUploaderDrag() {
                         console.log('두번째 요청 데이터: ', data);
 
                         if (data.answer == 'ok') {
-                            return router.push(`/upload?image_url=${data.url}`)};
+                            return router.push(`/upload?image_url=${fileUrl}`)};
                     })
                     .catch(error => {
-                        console.error('Fetch 오류: ', error)
+                        console.error('Fetch 오류: ', error) // 안녕
                     })
                 })
         } catch (error) {

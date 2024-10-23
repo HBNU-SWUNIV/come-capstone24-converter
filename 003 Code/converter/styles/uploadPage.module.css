@@ -1,5 +1,3 @@
-/* uploadPage.module.css */
-
 /* 전체 레이아웃 */
 .container {
   display: flex;
@@ -24,7 +22,7 @@
   padding: 10px;
 }
 
-/*페이지 크기 조절 아이콘*/
+/* 페이지 크기 조절 아이콘 */
 .pagescale {
   display: flex;
   align-items: center;
@@ -46,8 +44,8 @@
   cursor: pointer;
 }
 
- /* 다음 메뉴 버튼 */
- .aftermenuButton {
+/* 다음 메뉴 버튼 */
+.aftermenuButton {
   margin-left: 0px;
   padding: 5px;
   border: none;
@@ -65,7 +63,6 @@
   padding: 5px;
 }
 
-
 /* PDF 뷰어 */
 .pdfViewer {
   flex: 1;
@@ -73,8 +70,6 @@
   border-right: 1px solid #ccc;
   padding: 10px;
 }
-
-
 
 /* 채팅 영역 */
 .chatSection {
@@ -93,55 +88,79 @@
   margin-bottom: 10px;
 }
 
-
+/* 메시지 컨테이너 */
 .messageContainer {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
 }
 
 /* Q&A 버블 */
 .qaBubble {
   padding: 10px;
-
   border-radius: 10px;
   margin-bottom: 20px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  gap: 10px;
 }
 
-/* 메시지 행 (아이콘 + 텍스트 수평 배치) */
+/* 메시지 행 (아이콘 + 텍스트 수평 정렬) */
 .messageRow {
   display: flex;
   align-items: center; /* 아이콘과 텍스트 수평 정렬 */
   gap: 10px; /* 아이콘과 텍스트 사이 간격 */
+  flex-shrink: 0; /* 축소 방지 */
 }
 
+/* 사용자 아이콘 */
+.usericon {
+  width: 25px; /* 아이콘 크기 고정 */
+  height: 25px;
+  flex-shrink: 0; /* 축소되지 않도록 설정 */
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #080808;
+}
+
+/* 봇 아이콘 */
+.boticon {
+  width: 25px; /* 아이콘 크기 고정 */
+  height: 25px;
+  flex-shrink: 0; /* 축소되지 않도록 설정 */
+  border-radius: 50%;
+  background-color: #1d28c0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+/* 사용자 질문 */
 .qaQuestion {
   background-color: #f1f1f1;
   text-align: right;
   align-self: flex-end;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 60%; /* 화면을 넘지 않도록 제한 */
+  word-wrap: break-word; /* 긴 단어가 줄바꿈되도록 설정 */
 }
 
-.usericon {
-  width: 20px;
-  height: 20px;
-  color:#080808
-}
-
-.boticon {
-  width: 20px;
-  height: 20px;
-  color:#1d28c0
-}
-
+/* 봇 응답 */
 .qaAnswer {
   background-color: #dfebf4;
   margin-top: 10px;
   align-self: flex-start;
   text-align: left;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 60%; /* 화면을 넘지 않도록 제한 */
+  word-wrap: break-word;
 }
 
+/* 메시지 내용 */
 .messageContent {
   display: flex;
   flex-direction: column;
@@ -156,6 +175,7 @@
   background-color: #e0e0e0;
 }
 
+/* 입력 필드 */
 .input {
   flex: 1;
   padding: 10px;

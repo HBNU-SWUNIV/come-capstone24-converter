@@ -31,7 +31,9 @@ class RAG():
         )
 
         self.embeddings = embedding_functions.SentenceTransformerEmbeddingFunction(
-            model_name=EMBED_MODEL_ID
+            model_name=EMBED_MODEL_ID,
+            device = "cuda",
+            normalize_embeddings = True,
         )
 
         self.client = chromadb.PersistentClient(path=CHROMA_CLIENT_PATH)
