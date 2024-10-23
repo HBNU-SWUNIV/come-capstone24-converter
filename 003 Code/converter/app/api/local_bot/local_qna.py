@@ -20,7 +20,7 @@ from app.local_load.model_loader import RAG
 
 localQna = APIRouter(prefix='/localQna')
 
-ragInstance = RAG()
+ragInstance = RAG(file_name="test")
 
 pdf_file_path = ''
 # # 모델을 한 번 로드하고 여러 요청에 재사용
