@@ -103,18 +103,49 @@
 /* Q&A 버블 */
 .qaBubble {
   padding: 10px;
+
   border-radius: 10px;
   margin-bottom: 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  gap: 10px;
+}
+
+/* 메시지 행 (아이콘 + 텍스트 수평 배치) */
+.messageRow {
+  display: flex;
+  align-items: center; /* 아이콘과 텍스트 수평 정렬 */
+  gap: 10px; /* 아이콘과 텍스트 사이 간격 */
 }
 
 .qaQuestion {
-  background-color: #d1e7dd;
+  background-color: #f1f1f1;
   text-align: right;
+  align-self: flex-end;
+}
+
+.usericon {
+  width: 20px;
+  height: 20px;
+  color:#080808
+}
+
+.boticon {
+  width: 20px;
+  height: 20px;
+  color:#1d28c0
 }
 
 .qaAnswer {
-  background-color: #f0f0f0;
+  background-color: #dfebf4;
   margin-top: 10px;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.messageContent {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 /* 질문 입력 영역 */

@@ -8,6 +8,7 @@ import 'react-pdf/dist/esm/Page/TextLayer.css';
 import { Send, ZoomIn, ZoomOut, ChevronUp, ChevronDown } from "lucide-react";
 import {useTypewriter, Cursor} from "react-simple-typewriter";
 import { IconDots } from "@tabler/icons-react";
+import { Bot, User } from 'lucide-react';
 
 import Modal from '../../components/Modal';
 import ChatLoader from '../../components/ChatLoader';
@@ -90,10 +91,15 @@ export default function UploadPage() {
     };
     const handleSubmit = async (e) => {
       e.preventDefault();
-      setLoading(true);
+
   
+      const currentQuestion = question.trim() // 현재 질문 저장
+      if (!currentQuestion) return; // 빈 질문 무시
+
+      setLoading(true);
+      setQuestion(''); // 질문 폼 즉시 초기화 
       // 사용자의 질문만 기록
-      const newQuestion = { question, answer: null }; // answer는 null로 설정하여 비워둠
+      const newQuestion = { question: currentQuestion, answer: null }; // answer는 null로 설정하여 비워둠
       setQaHistory((prevHistory) => [...prevHistory, newQuestion]); // 전에 질의응답 했던 기록 + 질문창만 
   
       try {
@@ -125,9 +131,9 @@ export default function UploadPage() {
           console.error('Error fetching the answer:', error);
       } finally {
           setLoading(false);
-          setQuestion('');  // 입력 필드 초기화
       }
   };
+
    // Q&A 기록 영역에서 타이핑 효과를 적용
     const QaHistoryItem = ({ question, answer }) => {
         const [text] = useTypewriter({
@@ -258,31 +264,35 @@ export default function UploadPage() {
         {/* 채팅 영역 */}
         <div className={styles.chatSection}>
           
-          {/* Q&A 기록 영역 */}
-          <div className={styles.historySection}>
-            {qaHistory.map((qa, index) => (
-              <div key={index} className={styles.messageContainer}>
-                
-                {/* 사용자 질문 */}
-                <div className={`${styles.qaBubble} ${styles.qaQuestion}`}>
-                  <strong>You:</strong> {qa.question}
+        <div className={styles.historySection}>
+          {qaHistory.map((qa, index) => (
+            <div key={index} className={styles.messageContainer}>
+            {/* 사용자 질문 */}
+            <div className={`${styles.qaBubble} ${styles.qaQuestion}`}>
+              <div className={styles.messageRow}>
+                <User className={styles.usericon} />
+                <div className={styles.messageContent}>
+                  {qa.question}
                 </div>
-                {qa.answer !== null && ( // 모델을 통해 응답이 왔을 시에만 답변 출력 
-                    <div className={`${styles.qaBubble} ${styles.qaAnswer}`}>
-                        <strong>Bot:</strong> {qa.answer}
-                    </div>
-                )}
-                  </div>
-            ))}
-
-    
-            {/* Display loader in bot's bubble while waiting for response */}
-            {loading && (
-              <div className={`${styles.qaBubble} ${styles.qaAnswer}`}>
-                <strong>Bot:</strong>
-                <ChatLoader size='32px' color='blue' />
               </div>
-            )}
+            </div>
+
+            {/* 항상 Bot 아이콘 표시 */}
+            <div className={`${styles.qaBubble} ${styles.qaAnswer}`}>
+              <div className={styles.messageRow}>
+                <Bot className={styles.boticon} />
+                <div className={styles.messageContent}>
+                  {/* 로딩 중일 때는 ChatLoader, 응답이 있으면 답변 표시 */}
+                  {qa.answer !== null ? (
+                    qa.answer
+                  ) : (
+                    <ChatLoader size="32px" color="blue" />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
     
           </div>
     
