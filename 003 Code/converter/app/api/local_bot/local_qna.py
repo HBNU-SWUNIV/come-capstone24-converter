@@ -174,6 +174,7 @@ async def generate_answer(request: Request):
 async def upload(request: Request):
     global pdf_file_path, ragInstance
     data = await request.json()
+    print(data)
     # text = data.get("text")
     imageurl = data.get("pdf")
 

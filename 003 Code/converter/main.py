@@ -55,7 +55,7 @@ origins = [
 
 converter.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -67,7 +67,6 @@ converter.include_router(localQna)
 
 class summItem(BaseModel):
     url: str
-
 
 
 if __name__ == "__main__":

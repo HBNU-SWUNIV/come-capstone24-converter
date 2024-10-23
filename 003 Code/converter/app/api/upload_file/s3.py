@@ -49,7 +49,7 @@ async def upload(file: UploadFile):
     print("Generated URL:", url) # 저장 경로 출력   
 
     extracted_filename = s3_key.split("/")[-1]
-    print("파일명 : {extrated_filename}")
+    print(f"파일명 : {extracted_filename}")
 
     return JSONResponse(content={"url": url, "fileName": extracted_filename})
 

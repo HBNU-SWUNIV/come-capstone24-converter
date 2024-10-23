@@ -4,7 +4,7 @@ import chromadb
 from chromadb.utils import embedding_functions
 from llama_cpp import Llama
 from transformers import AutoTokenizer
-from langchain.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 
@@ -38,8 +38,10 @@ class RAG():
 
 
     def add_chunks(self, path: str) -> None:
+        print(f' [x] {path}')
+        file_name = path.split('.')[0]
         self.collection = self.client.create_collection(
-                name=path.split('.')[0],
+                name=file_name.split('/')[-1],
                 embedding_function=self.embeddings,
                 metadata={'hnsw:space': 'cosine'}
             )

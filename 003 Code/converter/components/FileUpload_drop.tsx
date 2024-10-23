@@ -48,36 +48,49 @@ export default function FileUploaderDrag() {
 
         try {   
             setLoading(true);  //로딩 시작
-            const res = await fetch("http://127.0.0.1:2000/s3r/upload", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (!res.ok) {  
-                console.error("Something went wrong, check your console.");
-                return;
-            }
-
-            const data: { url: string } = await res.json();
             
-            console.log("Received URL:", data.url); // URL이 정상적으로 받아졌는지 확인
-            
-            const res2 = await fetch("http://127.0.0.1:localQna/upload", {
+            fetch('http://127.0.0.1:2000/s3r/upload', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    pdf: data.url,
+                body: formData,
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error("Something went wrong, check your console.");
+                        return;
+                    }
+                    return response.json();
                 })
-            });
-            console.log("data embedding 중...")
-            const checker: { answer: string } = await res.json();
-            
-            if (checker.answer == 'ok') {
-                router.push(`/upload?image_url=${data.url}`)};
+                .then(data => {
+                    console.log('첫 요청 데이터: ', data);
 
+                    const fileUrl: {url: string} = data.url;
+                    return fetch('http://127.0.0.1:2000/localQna/upload', {
+                        method: 'POST',
+                        headers: {
+                            "Access-Control-Allow-Headers": "*",
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            pdf: fileUrl
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            console.error("Something went wrong, check your console.");
+                            return;
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('두번째 요청 데이터: ', data);
 
+                        if (data.answer == 'ok') {
+                            return router.push(`/upload?image_url=${data.url}`)};
+                    })
+                    .catch(error => {
+                        console.error('Fetch 오류: ', error)
+                    })
+                })
         } catch (error) {
             console.error("Something went wrong, check your console.");
         } finally {
