@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"next dev\" \"003 Code/converter/run_flask.sh\""
+    "dev": "concurrently \"next dev\"",
+    "build": "next build",
+    "start": "next start"
   },
   "author": "",
   "license": "MIT",
