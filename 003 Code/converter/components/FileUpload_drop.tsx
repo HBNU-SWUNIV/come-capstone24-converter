@@ -127,7 +127,7 @@ export default function FileUploaderDrag() {
             if (res.ok) {
                 const data = await res.json();
                 console.log(data);
-                // setRecentFiles(data);
+                // setRecentFiles(data); none 
             } else {
                 console.error("Failed to fetch recent files");
             }
