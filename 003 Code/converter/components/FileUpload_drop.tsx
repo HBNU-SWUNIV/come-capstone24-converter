@@ -62,64 +62,60 @@ export default function FileUploaderDrag() {
     fileInputRef.current?.click();
   };
 
-    const uploadFile = async (file: File) => {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        try {   
-            setLoading(true);  //로딩 시작
-            
-            fetch('http://127.0.0.1:2000/s3r/upload', {
-                method: 'POST',
-                body: formData,
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        console.error("Something went wrong, check your console.");
-                        return;
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('첫 요청 데이터: ', data);
-
-                    const fileUrl: {url: string} = data.url;
-                    return fetch('http://127.0.0.1:2000/localQna/upload', {
-                        method: 'POST',
-                        headers: {
-                            "Access-Control-Allow-Headers": "*",
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            pdf: fileUrl
-                        })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            console.error("Something went wrong, check your console.");
-                            return;
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('두번째 요청 데이터: ', data);
-
-                        if (data.answer == 'ok') {
-                            return router.push(`/upload?image_url=${fileUrl}`)};
-                    })
-                    .catch(error => {
-                        console.error('Fetch 오류: ', error) // 안녕
-                    })
-                })
-        } catch (error) {
-            console.error("Something went wrong, check your console.");
-        } finally {
-             // 1초 후 로딩 종료
-             setTimeout(() => setLoading(false), 1000);
-             fetchRecentFiles(); // 업로드 후 목록 갱신
-        }
-
-    };
+  const uploadFile = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+  
+    try {
+      setLoading(true); // 로딩 시작
+  
+      // 첫 번째 요청: 파일 업로드
+      const uploadResponse = await fetch('http://127.0.0.1:2000/s3r/upload', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (!uploadResponse.ok) {
+        throw new Error("Failed to upload file");
+        alert("파일 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      }
+  
+      const uploadData = await uploadResponse.json();
+      console.log('첫 요청 데이터: ', uploadData);
+  
+      const fileUrl: string = uploadData.url;
+  
+      // 두 번째 요청: PDF 처리
+      const processResponse = await fetch('http://127.0.0.1:2000/localQna/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ pdf: fileUrl }),
+      });
+  
+      if (!processResponse.ok) {
+        throw new Error("Failed to process file");
+        alert("파일 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      }
+  
+      const processData = await processResponse.json();
+      console.log('두번째 요청 데이터: ', processData);
+  
+      if (processData.answer === 'ok') {
+        router.push(`/upload?image_url=${fileUrl}`);
+      }
+    } catch (error) {
+      console.error("Error during upload process:", error);
+      alert("파일 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
+    } finally {
+      // 로딩 종료 및 파일 목록 갱신
+      setLoading(false);
+      await fetchFiles();
+    }
+  };
+  
+  
 
     const fetchRecentFiles = async () => {
         try {

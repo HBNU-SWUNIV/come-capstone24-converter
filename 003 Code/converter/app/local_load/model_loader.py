@@ -8,7 +8,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 
-MODEL_PATH = 'app/local_load/model/llama-3-Korean-Bllossom-8B-Q4_K_M.gguf'
+MODEL_PATH = 'app/llama-3-Korean-Bllossom-8B-Q4_K_M.gguf'
 EMBED_MODEL_ID = 'BAAI/bge-m3'
 CHROMA_CLIENT_PATH = "../../../db"
 
