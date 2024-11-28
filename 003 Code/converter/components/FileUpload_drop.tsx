@@ -137,23 +137,28 @@ export default function FileUploaderDrag() {
     }, []);
 
 
-    const deleteFile = async (fileName) => {
-        try {
-            const res = await fetch(`http://127.0.0.1:2000/s3r/delete?fileName=${fileName}`, {
-                method: "DELETE",
-            });
+    const deleteFile = async (fileName: string) => {
+      try {
+        const res = await fetch(`http://127.0.0.1:2000/s3r/delete?fileName=${fileName}`, {
+          method: "DELETE",
+        });
     
-            if (res.ok) {
-                const data = await res.json();
-                console.log(data.message); // 삭제 성공 메시지 확인
-                fetchRecentFiles(); // 파일 삭제 후 목록 갱신
-            } else {
-                console.error("Failed to delete file.");
-            }
-        } catch (error) {
-            console.error("Error deleting file:", error);
+        if (res.ok) {
+          const data = await res.json();
+          console.log(data.message); // 삭제 성공 메시지 확인
+          
+          // 삭제된 파일을 상태에서 즉시 제거
+          setFiles((prevFiles) => prevFiles.filter((file) => file.fileName !== fileName));
+        } else {
+          console.error("Failed to delete file.");
+          alert("파일 삭제 중 오류가 발생했습니다. 다시 시도해 주세요.");
         }
+      } catch (error) {
+        console.error("Error deleting file:", error);
+        alert("파일 삭제 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      }
     };
+    
 
 
   return (
@@ -201,16 +206,19 @@ export default function FileUploaderDrag() {
           {files.map((file, index) => (
             <div key={index} className={styles.fileBlock}>
               <X className={styles.deleteIcon} onClick={() => deleteFile(file.fileName)} />
-              <a href={file.url} target="_blank" rel="noopener noreferrer">
-                <div className={styles.fileInfo}>
-                  <p className={styles.fileName}>{file.fileName}</p>
-                  <p className={styles.fileSize}>{file.size}</p>
-                </div>
-              </a>
+              <div
+                onClick={() => router.push(`/upload?image_url=${encodeURIComponent(file.url)}`)}
+                className={styles.fileInfo}
+                style={{ cursor: "pointer" }}
+              >
+                <p className={styles.fileName}>{file.fileName}</p>
+                <p className={styles.fileSize}>{file.size}</p>
+              </div>
             </div>
           ))}
         </div>
       </div>
-    </div>
+
+      </div>
   );
 }
